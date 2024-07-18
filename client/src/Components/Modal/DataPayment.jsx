@@ -1,0 +1,142 @@
+import { FaNairaSign } from "react-icons/fa6";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { buyData } from "../../Helpers/api";
+import LoadingBtn from "../Helpers/LoadingBtn";
+import LoadingOvelay from "../Helpers/LoadingOvelay";
+
+
+function DataPayment({formData, setFormData}) {
+  const { currentUser } = useSelector((state) => state.braveSubUser);
+  const user = currentUser?.data
+    const cashPoint = user.cashPoint
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [ isLoading, setIsLoading ] = useState(false)
+    const useCashback = () => {
+      if(formData?.useCashback === false){
+        setFormData({...formData, useCashback: true})
+      } else {
+        setFormData({...formData, useCashback: false})
+      }
+    }
+
+    const handleData = async (e) => {
+      e.preventDefault()
+      try {
+        const phoneNumber = formData.phoneNumber
+        //update the mobile numbers
+        
+        const now = new Date();
+        const lastBought = now.toTimeString().split(' ')[0].slice(0, 5)
+        let phoneNumbersArray = JSON.parse(localStorage.getItem('bravesubuserphonenumber')) || [];
+        
+        const existingEntryIndex = phoneNumbersArray.findIndex(entry => entry.phoneNumber === phoneNumber);
+        if (existingEntryIndex !== -1) {
+          // Update the existing entry with the new time
+          phoneNumbersArray[existingEntryIndex].lastBought = lastBought;
+        } else {
+          // Add a new entry to the array
+          phoneNumbersArray.push({ phoneNumber, lastBought });
+        }
+  
+        //save new number or update phone number
+        localStorage.setItem('bravesubuserphonenumber', JSON.stringify(phoneNumbersArray));
+        setIsLoading(true)
+        const res = await buyData(formData)
+      } catch (error) {
+        
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+  return (
+    <form onSubmit={handleData} className="absolute left-0 top-0 flex w-full h-[100%] flex-col items-center">
+      <h1 className="text-[20px] font-bold">Payment</h1>
+      <h1 className="flex items-center gap-1 text-[36px] font-semibold text-main-color" ><FaNairaSign />{ formData.useCashback ? Math.round(formData?.dataPrice - cashPoint).toFixed(2) : Math.round(formData?.dataPrice).toFixed(2) }</h1>
+      {
+        formData.useCashback && (
+          <h3 className="font-semibold text-gray-400 line-through text-[24px] flex items-center gap-1 mb-2 phone:text-[20px]"><FaNairaSign /> {Math.round(formData?.dataPrice).toFixed(2)}</h3>
+        )
+      }
+
+      <div className="w-full overflow-y-auto">
+          <div className="w-full bg-white p-4 rounded-2xl flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[20px] font-light phone:text-[17px]">Amount</p>
+              <p className="flex items-center text-[20px] phone:text-[17px] font-medium"><FaNairaSign className="text-[16px]" />{Math.round(formData?.dataPrice).toFixed(2)}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-[20px] font-light phone:text-[17px]">Provider</p>
+              <p className="font-medium text-[22px] phone:text-[17px] flex gap-1.5 items-center">
+                <img className="w-[20px]" alt={formData?.network} src={formData?.icon} />
+                {formData?.network}
+              </p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-[20px] font-light phone:text-[17px]">Mobile Number</p>
+              <p className="font-medium text-[20px] phone:text-[17px]">{formData?.phoneNumber}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-[20px] font-light phone:text-[17px]">Bundle Details</p>
+              <p className="font-medium text-[20px] phone:text-[17px]">{formData?.bundleDetail}</p>
+            </div>
+          </div>
+
+          <div className="w-full mt-8 bg-white p-3 rounded-2xl flex items-center justify-between">
+            <p>BravePoints</p>
+            <div className="flex items-center gap-3">
+              <p className={`flex items-center text-[17px] font-medium ${formData.useCashback ? 'line-through text-gray-400' : ''}`}><FaNairaSign /> {Math.round(cashPoint).toFixed(2)} availble</p>
+              <div onClick={useCashback} className={`bg-gray-400 pl-[4px] pr-[4px] pt-[5px] pb-[5px] w-[45px] h-[26px] flex items-center rounded-xl cursor-pointer relative ${formData.useCashback ? 'bg-green-500': '' }`}>
+                <div className={`h-[20px] w-[20px] bg-white  rounded-full  ${formData.useCashback ? 'absolute right-1' : ''}`}></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col mt-8">
+            Earn
+            <div className="flex items-center justify-between rounded-2xl p-3 w-full bg-white">
+            <div className="flex items-center gap-2">
+                BravePoints
+                <div className="relative">
+                    <a
+                    href="#"
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                    className="flex items-center"
+                    >
+                        <AiOutlineExclamationCircle className="text-[20px]" />
+                    </a>
+                    {showTooltip && (
+                        <div className="absolute z-10 left-full ml-2 w-48 p-2 bg-gray-800 text-white text-xs rounded shadow-lg">
+                            BravePoints are calculated based on total amount paid. Get cash backs on purchases.
+                        </div>
+                    )}
+                </div>
+            </div>
+              <p className="text-yellow-500 font-bold text-[17px]">+{formData?.discountAllowed}Pts</p>
+            </div>
+          </div>
+
+      </div>
+
+      <div className="w-full mt-auto flex items-center justify-center">
+        {
+          isLoading ? (
+            <LoadingBtn />
+          ) : (
+            <button type="submit" className="btn">Proceed to Pay</button>
+          )
+        }
+      </div>
+      {
+        isLoading && (
+          <LoadingOvelay />
+        )
+      }
+    </form>
+  )
+}
+
+export default DataPayment
