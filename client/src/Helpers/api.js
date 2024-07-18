@@ -21,9 +21,9 @@ export async function loginUser(formData){
         const res = await axios.post('/auth/login', formData, {withCredentials: true})
         return res.data
     } catch (error) {
-        const errorMsg = error.response.data.data || 'Unable to register User'
+        const errorMsg = error.response.data.data || 'Unable to Login User'
         toast.error(errorMsg)
-        //console.log('EEEE', error)
+        console.log('LOGIN ERROR', error)
     }
 }
 
