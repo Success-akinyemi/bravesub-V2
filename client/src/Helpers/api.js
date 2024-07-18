@@ -12,7 +12,7 @@ export async function registerUser(formData){
     } catch (error) {
         const errorMsg = error.response.data.data || 'Unable to register User'
         toast.error(errorMsg)
-        //console.log('EEEE', error)
+        console.log('REGISTER ERROR', error)
     }
 }
 
