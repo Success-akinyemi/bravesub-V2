@@ -15,7 +15,7 @@ async function generateUniqueAdminUserCode(){
     }
 }
 
-export async function MakeAdmin(res, res){
+export async function MakeAdmin(req, res){
     const { id, passCode } = req.body
     try {
         const findUser = await UserModel.findById({ _id: id })
