@@ -1,5 +1,5 @@
 import { DisconnectReason, useMultiFileAuthState, makeWASocket } from '@whiskeysockets/baileys'
-import useMongoDBAuthState from '../../model/useMongoDBAuthState';
+import useMongoDBAuthState from '../../model/useMongoDBAuthState.js';
 import mongoose from 'mongoose';
 
 async function connectionLogic(){
