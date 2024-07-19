@@ -6,7 +6,7 @@
 
 @layer components {
   .page {
-    @apply bg-main-bg w-[100%] overflow-x-hidden min-h-[100vh] md:pl-5 md:pr-5 phone:pl-4 phone:pr-4 sm:pl-4 sm:pr-5 pt-[75px];
+    @apply bg-main-bg phone:bg-main-bg-2 w-[100%] overflow-x-hidden min-h-[100vh] md:pl-5 md:pr-5 phone:pl-4 phone:pr-4 sm:pl-4 sm:pr-5 pt-[75px];
   }
   .pagination{
     @apply md:pl-5 md:pr-5 phone:pl-4 phone:pr-4 sm:pl-4 sm:pr-5;

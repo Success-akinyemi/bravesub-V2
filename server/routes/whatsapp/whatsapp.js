@@ -32,8 +32,46 @@ async function connectionLogic(){
         }
     })
 
-    sock.ev.on('messages.upsert', (messageInfo) => {
-        console.log('MESSAGE INFO>>>', messageInfo)
+    sock.ev.on('messages.upsert', async ({messages, type}) => {
+        try{
+            if(type === 'notify'){
+                if(!messages[0]?.key.fromMe){
+                    const captureMessage = messages[0]?.message?.conversation;
+                    const numberWa = messages[0].key?.remoteJid
+
+                    const compareMessage = captureMessage.toLocaleLowerCase();
+
+                    console.log('MESSAGE INFO>>>', captureMessage)
+
+                    if(captureMessage === 'ping'){
+                        await sock.sendMessage(
+                            numberWa,
+                            {
+                                text: 'pong',
+                            },
+                            {
+                                quoted: messages[0]
+                            }
+                        )
+                    } 
+                    if(captureMessage === 'hello'){
+                        await sock.sendMessage(
+                            numberWa,
+                            {
+                                text: 'yooo how are you',
+                            },
+                            {
+                                quoted: messages[0]
+                            }
+                        )
+                    } 
+                }
+            }
+        } catch(error){
+            console.log('UNABLE TO REPLY MESSAGE', error)
+        }
+        
+        
     })
 
 
