@@ -27,12 +27,12 @@ function FootNav() {
         <Link className="flex flex-col items-center justify-center" to={'/dashboard'}>
             {
                 isActive('/dashboard') ? (
-                    <BiSolidHomeSmile className="text-[30px] text-main-color" />
+                    <BiSolidHomeSmile className="text-[30px] phone:text-[27px] small-phone:text-[24px] text-main-color" />
                 ) : (
-                    <BiHomeSmile className="text-[30px]" />
+                    <BiHomeSmile className="text-[30px] phone:text-[27px] small-phone:text-[24px]" />
                 )
             }
-            <p className={`font-semibold phone:text-[15px] ${isActive('/dashboard') ? 'text-main-color' : ''}`}>Home</p>
+            <p className={`font-semibold phone:text-[15px] small-phone:text-[13px] ${isActive('/dashboard') ? 'text-main-color' : ''}`}>Home</p>
         </Link>
         <Link className="flex flex-col items-center justify-center" to={'/airtime'}>
             {
@@ -42,7 +42,7 @@ function FootNav() {
                     <FaPhone className="text-[25px]" />
                 )
             }
-            <p className={`font-semibold phone:text-[15px] ${isActive('/airtime') ? 'text-main-color' : ''}`}>Airtime</p>
+            <p className={`font-semibold phone:text-[15px] small-phone:text-[13px] ${isActive('/airtime') ? 'text-main-color' : ''}`}>Airtime</p>
         </Link>
         <Link className="flex flex-col items-center justify-center" to={'/data'}>
             {
@@ -52,27 +52,27 @@ function FootNav() {
                     <MdOutlineNetworkWifi1Bar className="text-[28px]" />
                 )
             }
-            <p className={`font-semibold phone:text-[15px] ${isActive('/data') ? 'text-main-color' : ''}`}>Data</p>
+            <p className={`font-semibold phone:text-[15px] small-phone:text-[13px] ${isActive('/data') ? 'text-main-color' : ''}`}>Data</p>
         </Link>
         <Link className="flex flex-col items-center justify-center" to={'/refer-and-earn'}>
             {
                 isActive('/refer-and-earn') ? (
-                    <AiFillGift className="text-[30px] text-main-color" />
+                    <AiFillGift className="text-[30px] phone:text-[27px] small-phone:text-[24px] text-main-color" />
                 ) : (
-                    <AiOutlineGift className="text-[30px]" />
+                    <AiOutlineGift className="text-[30px] phone:text-[27px] small-phone:text-[24px]" />
                 )
             }
-            <p className={`font-semibold phone:text-[15px] ${isActive('/refer-and-earn') ? 'text-main-color' : ''}`}>Reward</p>
+            <p className={`font-semibold phone:text-[15px] small-phone:text-[13px] ${isActive('/refer-and-earn') ? 'text-main-color' : ''}`}>Reward</p>
         </Link>
         <Link className="flex flex-col items-center justify-center" to={'/profile'}>
             {
                 isActive('/profile') ? (
-                    <IoPersonCircle className="text-[30px] text-main-color" />
+                    <IoPersonCircle className="text-[30px] phone:text-[27px] small-phone:text-[24px] text-main-color" />
                 ) : (
-                    <IoPersonCircleOutline className="text-[30px]" />
+                    <IoPersonCircleOutline className="text-[30px] phone:text-[27px] small-phone:text-[24px]" />
                 )
             }
-            <p className={`font-semibold phone:text-[15px] ${isActive('/profile') ? 'text-main-color' : ''}`}>Me</p>
+            <p className={`font-semibold phone:text-[15px] small-phone:text-[13px] ${isActive('/profile') ? 'text-main-color' : ''}`}>Me</p>
         </Link>
 
     </div>

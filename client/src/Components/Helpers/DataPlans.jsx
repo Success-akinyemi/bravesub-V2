@@ -36,13 +36,13 @@ function DataPlans({formData, setformData, setSelectedCard, setPhoneNumberError}
 
   return (
     <div>
-        <div className="flex items-center gap-2 text-yellow-500 font-medium text-[17px]">
-            <img src={LogoImg} alt='logo' className='w-[30px]' />
+        <div className="flex items-center gap-2 text-yellow-500 font-medium text-[17px] phone:text-[14x] small-phone:text-[13px]">
+            <img src={LogoImg} alt='logo' className='w-[30px] phone:w-[25px] small-phone:w-[20px]' />
             {cashPoint} bravePoints <span className="text-black">available</span> 
         </div>
-        <p className="font-medium mt-2 pb-2 border-b-[3px] mb-2 border-black">{formData?.network} Data Plans</p>
+        <p className="font-medium mt-2 phone:mt-4 pb-2 border-b-[3px] mb-2 border-black phone:border-b-2">{formData?.network} Data Plans</p>
         
-        <div className='flex gap-3 flex-wrap mt-3'>
+        <div className='flex gap-3 flex-wrap mt-3 justify-center'>
             {
               isFetchingDataPlans ? (
                 <div className='flex w-full items-center justify-center '>
@@ -51,16 +51,16 @@ function DataPlans({formData, setformData, setSelectedCard, setPhoneNumberError}
               ) : (
                     dataArrayToDisplay?.map((item, idx) => (
                         <div onClick={() => setData(item)} key={idx} className='flex flex-col items-center p-2 border border-gray-500 rounded-2xl gap-2 cursor-pointer'>
-                            <p className='text-main-color text-[19px] phone:text-[17px]'>{item.validity}</p>
+                            <p className='text-main-color text-[19px] phone:text-[17px] small-phone:text-[15px]'>{item.validity}</p>
                             <div className='flex items-baseline'>
-                                <h2 className='text-[32px] phone:text-[24px] font-semibold'>{item.planName}</h2>
-                                <p className='font-semibold phone:text-[15px]'>{item.planType}</p>
+                                <h2 className='text-[32px] phone:text-[24px] small-phone:text-[22px] font-semibold'>{item.planName}</h2>
+                                <p className='font-semibold phone:text-[15px] small-phone:text-[14px]'>{item.planType}</p>
                             </div>
-                            <span className='flex items-center gap-1 font-medium'>
+                            <span className='flex items-center gap-1 small-phone:text-[15px] small-phone:gap-[1px] font-medium'>
                                 <FaNairaSign />
                                 {item?.price}
                             </span>
-                            <span className='flex items-center text-gray-600'>
+                            <span className='flex items-center text-gray-600 small-phone:text-[13px]'>
                                 <FaNairaSign className='font-extralight' />
                                 {`${item?.discountAllowed} cashback`}
                             </span>

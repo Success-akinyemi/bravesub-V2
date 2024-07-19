@@ -52,8 +52,8 @@ function App() {
       {
         selectedCard && (
         <div className='fixed w-[100vw] h-[100vh] top-0 left-0 bg-black bg-opacity-80 z-50 overflow-x-hidden'>
-          <div className='bg-main-bg w-full absolute flex flex-col bottom-0 left-0 h-[80vh] phone:h-[85vh] rounded-tl-[4rem] rounded-tr-[4rem] pl-6 pr-6 pt-4 pb-4'>
-            <span onClick={closePopup} className='text-[40px] font-extralight border-[3px] text-gray-600 cursor-pointer rounded-full border-gray-600 h-[40px] w-[40px] flex items-center justify-center ml-auto'>&times;</span>
+          <div className='bg-main-bg w-full absolute flex flex-col bottom-0 left-0 h-[80vh] phone:h-[85vh] small-phone:h-[95vh] rounded-tl-[4rem] rounded-tr-[4rem] pl-6 pr-6 pt-4 pb-4'>
+            <span onClick={closePopup} className='text-[40px] small-phone:text-[35px] font-extralight border-[3px] text-gray-600 cursor-pointer rounded-full border-gray-600 h-[40px] w-[40px] small-phone:h-[35px] small-phone:w-[35px] flex items-center justify-center ml-auto'>&times;</span>
             <div className='h-full relative'>
               {renderPopup()}
             </div>

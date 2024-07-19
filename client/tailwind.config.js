@@ -14,6 +14,7 @@ export default {
       },
       screens: {
         'phone': {'max': '500px'},
+        'small-phone': {'max': '450px'},
       },
       boxShadow: {
         'shadow': '0px -1px 8px 0px rgba(0,0,0,0.55)',

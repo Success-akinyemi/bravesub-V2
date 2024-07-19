@@ -44,7 +44,7 @@ function Dashboard() {
         <Announcement text={'bravesub version 2 is coming out soon'} />
         <div className="mt-5 bg-white rounded-3xl overflow-hidden">
           <AccountBalance />
-          <div className="pt-1 pb-1 pl-5 pr-5 flex text-[15px] font-semibold">
+          <div className="pt-1 pb-1 pl-5 pr-5 flex text-[15px] small-phone:text-[12px] font-semibold">
             enjoy zero transaction fees on all deposits
           </div>
         </div>

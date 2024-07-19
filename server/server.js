@@ -55,6 +55,8 @@ app.use('/api/web/admin', adminRoute)
 
 
 //WHATSAPP
+//import whatsappp
+import './routes/whatsapp/whatsapp.js'
 
 //INSTAGRAM
 
