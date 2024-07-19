@@ -5,7 +5,8 @@ import mongoose from 'mongoose';
 async function connectionLogic(){
     //For LOCALS
     //const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
-    const collection = mongoose.connection.db('whatsapp_api').collection('auth_info_baileys')
+    //const collection = mongoose.connection.db('whatsapp_api').collection('auth_info_baileys')
+    const collection = mongoose.connection.collection('auth_info_baileys');
     const { state, saveCreds } = await useMongoDBAuthState(collection)
 
 

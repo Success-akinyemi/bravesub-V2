@@ -1,6 +1,6 @@
 //import { BufferJSON, initAuthCreds, proto } from 'baileys';
 
-import { Curve, generateRegistrationId, proto, signedKeyPair } from "@whiskeysockets/baileys";
+import proto, { Curve, generateRegistrationId, signedKeyPair } from "@whiskeysockets/baileys";
 import { randomBytes } from "crypto";
 
 
@@ -53,36 +53,36 @@ const initAuthCreds = () => {
     },
   };
 
-const useMongoDBAuthState = async (collection) => {
+  const useMongoDBAuthState = async (collection) => {
     const writeData = async (data, id) => {
         const informationToStore = JSON.parse(
             JSON.stringify(data, BufferJSON.replacer)
-        )
+        );
 
         const update = {
             $set: {
                 ...informationToStore,
             },
         };
-        return collection.updateOne({ _id: id }, update, { upsert: true })
+        return collection.updateOne({ _id: id }, update, { upsert: true });
     };
 
-    const readData = async () => {
+    const readData = async (id) => {
         try {
             const data = JSON.stringify(await collection.findOne({ _id: id }));
-            return JSON.parse(data, BufferJSON.reviver)
+            return JSON.parse(data, BufferJSON.reviver);
         } catch (error) {
-            console.log('ERROR READING DATA IN >>')
-            return null
+            console.log('ERROR READING DATA IN >>', error);
+            return null;
         }
     };
 
-    const removeData = async () => {
-       try {
-            await collection.deleteOne({ _id: id })
-       } catch (error) {
-        console.log('UABLE TO REMOVE ERROR', error)
-       }
+    const removeData = async (id) => {
+        try {
+            await collection.deleteOne({ _id: id });
+        } catch (error) {
+            console.log('UNABLE TO REMOVE DATA', error);
+        }
     };
 
     const creds = (await readData('creds')) || initAuthCreds();
@@ -91,26 +91,26 @@ const useMongoDBAuthState = async (collection) => {
         state: {
             creds,
             keys: {
-                get: async () => {
+                get: async (type, ids) => {
                     const data = {};
                     await Promise.all(
                         ids.map(async (id) => {
-                            let value = await readData(`${type}-${id}`)
-                            if(type === 'app-state-sync-key'){
-                                value = proto.Message.AppStateSyncKeyData.fromObject(data)
-                            } 
-                            data[id] = value
+                            let value = await readData(`${type}-${id}`);
+                            if (type === 'app-state-sync-key') {
+                                value = proto.Message.AppStateSyncKeyData.fromObject(value);
+                            }
+                            data[id] = value;
                         })
                     );
-                    return data
+                    return data;
                 },
                 set: async (data) => {
-                    const tasks = []
-                    for (const category of Object.keys(data[category])){
-                        for (const id of Object.keys(data[category])){
+                    const tasks = [];
+                    for (const category of Object.keys(data)) {
+                        for (const id of Object.keys(data[category])) {
                             const value = data[category][id];
-                            const key = `${category}-${id}`
-                            tasks.push(value ? writeData(value, key) : removeData(key))
+                            const key = `${category}-${id}`;
+                            tasks.push(value ? writeData(value, key) : removeData(key));
                         }
                     }
 
@@ -119,7 +119,7 @@ const useMongoDBAuthState = async (collection) => {
             }
         },
         saveCreds: () => {
-            return writeData(creds, 'creds')
+            return writeData(creds, 'creds');
         }
     };
 };
