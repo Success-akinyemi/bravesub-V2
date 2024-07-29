@@ -9,7 +9,7 @@ const sendEmail = (options) => {
         service: process.env.EMAIL_SERVICE,
         auth: {
             user: process.env.NODEMAILER_USER,
-            pass: process.env.NODEMAILER_PASSWORD
+            pass: process.env.NODEMAILER_PW
         }
     })
 

@@ -21,6 +21,14 @@ function AccountBalance() {
         localStorage.setItem('braveShowBalance', newShowBalance)
         setShowBalance(newShowBalance)
     }
+
+    function formatBalance(balance) {
+        return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(balance);
+    }
+
   return (
     <div className="bg-light-bg rounded-3xl p-3 pl-5 pr-5 small-phone:pl-3 small-phone:pr-3 flex flex-col gap-3">
         <div className="flex items-center justify-between">
@@ -47,7 +55,7 @@ function AccountBalance() {
             <div>
                 {
                     showBalance ? 
-                        <span className="flex items-center gap-1 text-3xl sm:text-2xl phone:text-[21px] small-phone:text-[20px]">{Math.round(user.acctBalance).toFixed(2)} <IoIosArrowForward /></span> 
+                        <span className="flex items-center gap-1 text-3xl sm:text-2xl phone:text-[21px] small-phone:text-[20px]">{formatBalance(user.acctBalance)} <IoIosArrowForward /></span> 
                     : 
                         <span className="text-2xl sm:text-xl">****</span>
                 }

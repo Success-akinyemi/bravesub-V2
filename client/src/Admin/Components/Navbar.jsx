@@ -1,4 +1,4 @@
-import ProfileImg from '../assets/profile.png'
+import ProfileImg from '../../assets/profile.png'
 import { FaHeadset } from "react-icons/fa";
 import { LuBell } from "react-icons/lu";
 import { useSelector } from 'react-redux';

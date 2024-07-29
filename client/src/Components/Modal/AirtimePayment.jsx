@@ -3,6 +3,8 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { buyAirtime } from "../../Helpers/api";
+import LoadingOvelay from "../Helpers/LoadingOvelay";
+import LoadingBtn from "../Helpers/LoadingBtn";
 
 function AirtimePayment({formData, setFormData}) {
   const { currentUser } = useSelector((state) => state.braveSubUser);

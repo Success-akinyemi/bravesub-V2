@@ -1,13 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LogoImg from '../../assets/logo.png'
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../Helpers/api';
 import toast from 'react-hot-toast';
 import LoadingBtn from '../../Components/Helpers/LoadingBtn';
 
 function Register({formData, setformData}) {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const refParams = queryParams.get("ref");
+    const referredBy = refParams;
+
+    useEffect(() => {
+        if(referredBy){
+            setformData({ ...formData, referredBy: referredBy })
+        }
+    }, [])
+
+    useEffect(() => {console.log(formData)}, [formData])
+
     const navigate = useNavigate()
     const [ passwordVisible, setPasswordVisible ] = useState(false)
     const [ confirmPasswordVisible, setConfirmPasswordVisible ] = useState(false)
@@ -67,9 +80,12 @@ function Register({formData, setformData}) {
         try {
             setIsLoading(true)
             const res = await registerUser(formData)
+            //console.log('first', res)
             if(res.success){
-                console.log('res', res)
-                isVerified
+                //console.log('res', res)
+                navigate("/email-verification", {
+                    state: { resMsg: `${res?.data}` },
+                  });
             }
         } catch (error) {
             

@@ -14,7 +14,7 @@ export const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, "please Provide a valid email"],
+        //required: [true, "please Provide a valid email"],
         unique: [true, "Email already exist"]
     },
     firstName: { type: String },
@@ -49,10 +49,23 @@ export const UserSchema = new mongoose.Schema({
     referrals: {
         type: Array
     },
+    referredBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'bravesubUsers'
+    },
     verified: {
         type: Boolean,
         default: false
-    }
+    },
+    blocked: {
+        type: Boolean,
+        default: false
+    },
+    createdSource: {
+        type: String
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
 },
 {minimize: false},
 {timestamps: true}

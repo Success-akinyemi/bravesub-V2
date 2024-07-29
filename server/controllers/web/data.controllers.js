@@ -9,6 +9,12 @@ export async function buyData(req, res){
         if (!mobileRegex.test(phoneNumber)) {
             return res.status(400).json({ success: false, data: 'Invalid phone number' });
         }
+        const dataPlans = await DataPlansModel.find()
+        const findExistingNetwork = dataPlans.filter(option => option.networkCode === networkCode);
+
+        const findDataPlan = findExistingNetwork.filter(option => option.dataCode === dataCode);
+        const dataPlan = findDataPlan[0]
+        console.log('DATA', dataPlan)
         
     } catch (error) {
         console.log('UNABLE TO BUY DATA', error)
@@ -17,9 +23,9 @@ export async function buyData(req, res){
 }
 
 export async function createDataPlans(req, res) {
-    const { networkCode, networkName, dataCode, planName, planType, price, discountAllowed, validity } = req.body;
+    const { networkCode, networkName, dataCode, planName, planType, price, discountAllowed, validity, costPrice } = req.body;
     try {
-        if (!networkCode || !networkName || !dataCode || !planName || !planType || !price || !validity) {
+        if (!networkCode || !networkName || !dataCode || !planName || !planType || !price || !validity || !costPrice) {
             return res.status(400).json({ success: false, data: 'All fields are required' });
         }
 
@@ -34,7 +40,7 @@ export async function createDataPlans(req, res) {
         }
 
         const newDataPlan = await DataPlansModel.create({
-            networkCode, networkName, dataCode, planName, planType, price, discountAllowed, validity
+            networkCode, networkName, dataCode, planName, planType, price, discountAllowed, validity, costPrice
         });
         console.log(newDataPlan);
         return res.status(201).json({ success: true, data: `New data plan created for ${networkName}` });
@@ -45,15 +51,16 @@ export async function createDataPlans(req, res) {
 }
 
 export async function updateDataPlans(req, res) {
-    const { id, networkCode, networkName, dataCode, planName, planType, price, discountAllowed, validity } = req.body;
+
+    const { _id, networkCode, networkName, dataCode, planName, planType, price, discountAllowed, costPrice, validity } = req.body;
     try {
-        const findDataPlan = await DataPlansModel.findById({ _id: id });
+        const findDataPlan = await DataPlansModel.findById({ _id: _id });
         if(!findDataPlan){
             return res.status(404).json({ success: false, data: 'No data Plan with this id found'})
         }
 
         const updatedDataPlan = await DataPlansModel.findByIdAndUpdate(
-            id,
+            _id,
             {
                 $set: {
                     networkCode,
@@ -62,6 +69,7 @@ export async function updateDataPlans(req, res) {
                     planName,
                     planType,
                     price,
+                    costPrice,
                     discountAllowed,
                     validity
                 }
@@ -90,11 +98,22 @@ export async function deleteDataPlan(req, res){
 
 export async function fetAllDataPlans(req, res){
     try {
+        const fetchDataPlans = await DataPlansModel.find().select('-costPrice')
+
+        res.status(200).json({ success: true, data: fetchDataPlans })
+    } catch (error) {
+        console.log('UNABLE TO FETCH ALL DATA PLANS FROM DB')
+        res.status(500).json({ success: false, data: error.message || 'Unable to fetch data plans'})
+    }
+}
+
+export async function adminFetAllDataPlans(req, res){
+    try {
         const fetchDataPlans = await DataPlansModel.find()
         
         res.status(200).json({ success: true, data: fetchDataPlans })
     } catch (error) {
         console.log('UNABLE TO FETCH ALL DATA PLANS FROM DB')
-        res.status().json({ success: false, data: errorr.message || 'Unable to fetch data plans'})
+        res.status(500).json({ success: false, data: error.message || 'Unable to fetch data plans'})
     }
 }

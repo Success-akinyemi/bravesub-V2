@@ -30,8 +30,8 @@ function AuthorizeUser() {
   }
 
   function AuthorizeAdmin() {
-    const { currentUser: adminCurrentUser } = useSelector((state) => state.goAdmin);
-    const admin = adminCurrentUser?.data;
+    const { currentUser } = useSelector((state) => state.braveSubUser);
+    const admin = currentUser?.data;
 
     const token = localStorage.getItem('bravesubAtoken');
     const tokenExist = !!token;
@@ -50,7 +50,7 @@ function AuthorizeUser() {
           navigate('/login')
         }
       }
-    }, [adminCurrentUser, tokenExist]); 
+    }, [currentUser, tokenExist]); 
   
     return tokenExist && admin ? <Outlet /> : <Navigate to={'/'} />;
   }

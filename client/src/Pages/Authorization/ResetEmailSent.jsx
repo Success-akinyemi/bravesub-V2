@@ -22,7 +22,7 @@ function ResetEmailSent() {
                 <small className="">A password reset email successfully sent to you</small>
             </div>
 
-            <p className="text-main-color font-medium mt-[2rem]">
+            <p className="text-main-color font-medium mt-[2rem] text-center">
                 {msg}
             </p>
 

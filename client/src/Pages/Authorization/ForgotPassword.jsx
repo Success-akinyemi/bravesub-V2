@@ -1,10 +1,11 @@
 import { useState } from "react"
 import LoadingBtn from "../../Components/Helpers/LoadingBtn"
 import LogoImg from '../../assets/logo.png'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { forgotPassword } from "../../Helpers/api"
 
 function ForgotPassword({formData, setformData}) {
+  const navigate = useNavigate()
     const [ isLoading, setIsLoading ] = useState(false)
 
     const handleInputs = (e) => {
@@ -20,7 +21,7 @@ function ForgotPassword({formData, setformData}) {
         try {
           setIsLoading(true)
             const res = await forgotPassword(formData)
-            if (res?.success) {
+            if(res?.success) {
               navigate("/reset-email-sent", {
                 state: { resMsg: `${res?.msg} to ${res?.data}` },
               });

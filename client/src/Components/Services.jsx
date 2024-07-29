@@ -12,11 +12,11 @@ function Services() {
     useEffect(() => {
         const handleResize = () => {
           if (window.innerWidth < 640) {
-            setItemsPerPage(6);
+            setItemsPerPage(5);
           } else if (window.innerWidth < 1024) {
             setItemsPerPage(4);
           } else {
-            setItemsPerPage(6);
+            setItemsPerPage(5);
           }
         };
     

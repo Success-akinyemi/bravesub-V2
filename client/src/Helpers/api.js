@@ -58,7 +58,7 @@ export async function forgotPassword(formData){
 export async function resetPassword(formData){
     try {
         const res = await axios.post(`/auth/resetPassword/${formData.resetToken}`, formData, {withCredentials: true})
-        //console.log('reset password',res)
+        console.log('reset password',res)
         if(res.data){
             return res.data
         }
@@ -66,6 +66,20 @@ export async function resetPassword(formData){
         const errorMsg = error.response.data.data || 'Unable to Proccess forgot password request'
         toast.error(errorMsg)
         //console.log('RESET PASSWORD', error)
+    }
+}
+
+export async function updateUser(formData){
+    try {
+        const res = await axios.post('/user/updateUser', formData, {withCredentials: true})
+        //console.log('Update User',res)
+        if(res.data.success){
+            return res.data.data
+        }
+    } catch (error) {
+        const errorMsg = error.response.data.data || 'Unable to update user'
+        toast.error(errorMsg)
+        console.log('Update User ERROR', error)
     }
 }
 
@@ -121,5 +135,65 @@ export async function buyAirtime(formData){
         const errorMsg = error.response.data.data || 'Unable to Proccess buy data request'
         toast.error(errorMsg)
         //console.log('BUY DATA', error)
+    }
+}
+
+
+
+//ADMIN ROUTES
+
+export async function adminLogin(formData){
+    try {
+        const res = await axios.post('/admin/loginAdmin', formData, {withCredentials: true})
+        //console.log('ADMIN LOGIN',res)
+        if(res.data){
+            return res.data
+        }
+    } catch (error) {
+        const errorMsg = error.response.data.data || 'Unable to initialize login process Proccess'
+        toast.error(errorMsg)
+        //console.log('ADMIN LOGIN ERROR', error)
+    }
+}
+
+export async function adminUpdateUser(formData){
+    try {
+        const res = await axios.post('/user/adminUpdateUser', formData, {withCredentials: true})
+        //console.log('Admin Update User',res)
+        if(res.data){
+            return res.data
+        }
+    } catch (error) {
+        const errorMsg = error.response.data.data || 'Unable to update user'
+        toast.error(errorMsg)
+        console.log('Admin Update User ERROR', error)
+    }
+}
+
+export async function updateDataPlans(formData){
+    try {
+        const res = formData._id ? await axios.post('/data/updateDataPlans', formData, {withCredentials: true}) : await axios.post('/data/createDataPlans', formData, {withCredentials: true})
+        //console.log('UPDTAE DATA PLAN',res)
+        if(res.data.success){
+            return res.data
+        }
+    } catch (error) {
+        const errorMsg = error.response.data.data || 'Unable to update data plan'
+        toast.error(errorMsg)
+        //console.log('UPDATE DATA PLAN ERROR', error)
+    }
+}
+
+export async function makeAdmin({id, passCode}){
+    try {
+        const res = await axios.post('/admin/MakeAdmin', {id, passCode}, {withCredentials: true})
+        //console.log('UPDTAE DATA PLAN',res)
+        if(res.data){
+            return res.data
+        }
+    } catch (error) {
+        const errorMsg = error.response.data.data || 'Unable to update data plan'
+        toast.error(errorMsg)
+        //console.log('UPDATE DATA PLAN ERROR', error)
     }
 }

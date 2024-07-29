@@ -41,7 +41,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 256,
         discountAllowed: 2,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 250
     },
     {
         networkCode: 1,
@@ -51,7 +52,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 512,
         discountAllowed: 4,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 500
     },
     {
         networkCode: 2,
@@ -61,7 +63,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 250,
         discountAllowed: 2,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 240
     },
     {
         networkCode: 2,
@@ -71,7 +74,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 500,
         discountAllowed: 4,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 480
     },
     {
         networkCode: 3,
@@ -81,7 +85,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 250,
         discountAllowed: 2,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 240
     },
     {
         networkCode: 3,
@@ -91,7 +96,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 500,
         discountAllowed: 4,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 480
     },
     {
         networkCode: 4,
@@ -101,7 +107,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 220,
         discountAllowed: 2,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 210
     },
     {
         networkCode: 4,
@@ -111,7 +118,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 440,
         discountAllowed: 4,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 420
     },
     {
         networkCode: 5,
@@ -121,7 +129,8 @@ export const dataOptions = [
         planType: 'GB',
         price: 240,
         discountAllowed: 2,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 230
     },
     {
         networkCode: 5,
@@ -131,8 +140,21 @@ export const dataOptions = [
         planType: 'GB',
         price: 480,
         discountAllowed: 4,
-        validity: '30 DAYS'
+        validity: '30 DAYS',
+        costPrice: 460
     },
 
 ]
 
+export const dataServices = [
+    {
+        text: 'Schedule Data Top-up',
+        subtext: 'Never run out of data with automatic schedule',
+        link: 'schedule-top-up'
+    },
+    {
+        text: 'USSD Enquiry',
+        subtext: 'get USSD code, check data balnace and more',
+        link: 'ussd-enquiry'
+    },
+]

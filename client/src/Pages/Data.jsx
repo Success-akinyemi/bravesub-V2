@@ -3,9 +3,9 @@ import FootNav from "../Components/FootNav"
 import Navbar from "../Components/Navbar"
 import { FaArrowLeftLong } from "react-icons/fa6"
 import { useEffect, useState } from "react"
-import { IoMdArrowDropdown, IoMdCloseCircle, IoMdPerson } from "react-icons/io"
+import { IoIosArrowForward, IoMdArrowDropdown, IoMdCloseCircle, IoMdPerson } from "react-icons/io"
 import Announcement from "../Components/Announcement"
-import { dataNetworks } from "../data/data"
+import { dataNetworks, dataServices } from "../data/data"
 import DataPlans from "../Components/Helpers/DataPlans"
 
 function Data({setSelectedCard, formData, setformData}) {
@@ -73,7 +73,7 @@ function Data({setSelectedCard, formData, setformData}) {
                 </h2>
             </div>
 
-        </div>
+          </div>
 
         {
           isAnnouncement && (
@@ -160,6 +160,25 @@ function Data({setSelectedCard, formData, setformData}) {
             <DataPlans formData={formData} setformData={setformData} setSelectedCard={setSelectedCard} setPhoneNumberError={setPhoneNumberError}/>
           </div>
         </div>
+
+        {/**Data services */}
+        <div className="rounded-3xl bg-white p-3 mt-[2rem] mb-[3rem]">
+            <h2 className="font-semibold small-phone:text-[14px]" >Data Services</h2>
+
+            <div className="flex flex-col gap-2 ml-8 mt-4">
+              {dataServices.map((item) => (
+                <Link className="flex items-center justify-between mb-2" to={`/${item?.link}`}>
+                  <div className="flex flex-col">
+                    <h3 className="font-semibold small-phone:text-[14px]">{item?.text}</h3>
+                    <p className="text-[15px] phone:text-[14px] small-phone:text-[11px] text-gray-600 small-phone:text-gray-700">{item?.subtext}</p>
+                  </div>
+                  <IoIosArrowForward className="text-gray-600 text-[19px] small-phone:text-[15px]" />
+                </Link>
+              ))}
+            </div>
+            
+        </div>
+
         <FootNav />
     </div>
   )

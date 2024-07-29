@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcryptjs from 'bcryptjs'
+import jsonwebtoken from 'jsonwebtoken'
 
 const AdminUserSchema = new mongoose.Schema({
     userId: {
@@ -17,7 +18,8 @@ const AdminUserSchema = new mongoose.Schema({
     },
     adminUserCode: {
         type: String,
-        unique: [true, 'Admin User Code must be unique']
+        unique: [true, 'Admin User Code must be unique'],
+        required: [true, 'Admin User Code is required']
     },
     active: {
         type: Boolean,
@@ -46,7 +48,7 @@ AdminUserSchema.methods.matchPassCode = async function(passCode){
 }
 
 AdminUserSchema.methods.getSignedToken = function(){
-    return jsonwebtoken.sign({ id: this.userId, isAdmin: this.isAdmin}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE})
+    return jsonwebtoken.sign({ id: this.userId, isActive: this.active}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE})
 }
 
 

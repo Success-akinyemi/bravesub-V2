@@ -27,7 +27,8 @@
   font-family: "Poppins", sans-serif;
 }
 
-input{
+input,
+select{
   border: none;
   border-bottom: 3px solid #000;
   transition: all 200ms ease-in-out;

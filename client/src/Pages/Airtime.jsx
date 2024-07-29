@@ -266,7 +266,7 @@ function Airtime({setSelectedCard, formData, setformData}) {
 
             <div className="flex flex-col gap-2 ml-8 mt-4">
               {airtimeServices.map((item) => (
-                <Link className="flex items-center justify-between mb-2" to={item?.link}>
+                <Link className="flex items-center justify-between mb-2" to={`/${item?.link}`}>
                   <div className="flex flex-col">
                     <h3 className="font-semibold small-phone:text-[14px]">{item?.text}</h3>
                     <p className="text-[15px] phone:text-[14px] small-phone:text-[11px] text-gray-600 small-phone:text-gray-700">{item?.subtext}</p>

@@ -17,7 +17,13 @@ import ForgotPassword from './Pages/Authorization/ForgotPassword'
 import VerifyUser from './Pages/Authorization/VerifyUser'
 import ResetEmailSent from './Pages/Authorization/ResetEmailSent'
 import ResetPassword from './Pages/Authorization/ResetPassword'
-import { AuthorizeUser } from './Auth/ProtectRoute'
+import { AuthorizeAdmin, AuthorizeUser } from './Auth/ProtectRoute'
+import AdminLogin from './Admin/AdminLogin'
+import AdminDashboard from './Admin/AdminDashboard'
+import Users from './Admin/Users'
+import ViewUser from './Admin/Modal/ViewUser'
+import DataPlans from './Admin/DataPlans'
+import EditDataPlan from './Admin/Modal/EditDataPlan'
 
 
 function App() {
@@ -36,6 +42,18 @@ function App() {
         return (
           <div>
             <DataPayment formData={formData} setFormData={setFormData} />
+          </div>
+        )
+      case 'viewUser':
+        return (
+          <div>
+            <ViewUser formData={formData} setFormData={setFormData} />            
+          </div>
+        )
+      case 'editDataPlans':
+        return (
+          <div>
+            <EditDataPlan formData={formData} setFormData={setFormData} />            
           </div>
         )
     }
@@ -83,11 +101,24 @@ function App() {
           <Route path='/refer-and-earn' element={<Rewards />} />
           </Route>
           <Route element={<AuthorizeUser />}>
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/profile' element={<Profile formData={formData} setFormData={setFormData} />} />
           </Route>
           <Route element={<AuthorizeUser />}>
             <Route path='funding' element={<Funding formData={formData} setformData={setFormData} />} />
           </Route>
+
+          //ADMIN
+          <Route path='admin-login' element={<AdminLogin formData={formData} setformData={setFormData} />} />
+          <Route element={<AuthorizeAdmin />}>
+            <Route path='/users' element={<Users setSelectedCard={setSelectedCard} setFormData={setFormData} />} />
+          </Route>
+          <Route element={<AuthorizeAdmin />}>
+            <Route path='admin-dashboard' element={<AdminDashboard formData={formData} setformData={setFormData} />} />
+          </Route>
+          <Route element={<AuthorizeAdmin />}>
+            <Route path='/data-plans' element={<DataPlans setSelectedCard={setSelectedCard} setformData={setFormData} formData={formData} />} />
+          </Route>
+
 
         </Routes>
       </BrowserRouter>

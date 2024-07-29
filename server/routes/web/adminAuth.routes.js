@@ -5,9 +5,11 @@ const router = express.Router()
 
 router.post('/MakeAdmin', controllers.MakeAdmin)
 router.post('/loginAdmin', controllers.loginAdmin)
+router.post('/deleteAdmin', controllers.deleteAdmin)
+
 
 //GET ROUTES
-router.post('/getAllAdmin', controllers.getAllAdmin)
+router.get('/getAllAdmin', controllers.getAllAdmin)
 
 
 

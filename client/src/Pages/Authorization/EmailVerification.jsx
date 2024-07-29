@@ -22,7 +22,7 @@ function EmailVerification() {
                 <small className="">Your account has been successfully created</small>
             </div>
 
-            <p className="text-main-color font-medium mt-[2rem]">
+            <p className="text-main-color font-medium mt-[2rem] text-center">
                 {msg}
             </p>
 

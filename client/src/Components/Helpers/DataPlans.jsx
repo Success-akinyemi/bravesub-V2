@@ -12,6 +12,7 @@ function DataPlans({formData, setformData, setSelectedCard, setPhoneNumberError}
     const { dataPlans, isFetchingDataPlans } = useFetchDataPlans()
     //const dataOptions = dataOptions
     const dataOptions = dataPlans?.data
+  
     const [dataArrayToDisplay, setDataArrayToDisplay] = useState([]);
 
     useEffect(() => {

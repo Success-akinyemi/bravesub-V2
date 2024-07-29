@@ -5,7 +5,7 @@ import AdminUserModel from '../model/AdminUser.js';
 //authorize user routes
 export const Protect = async (req, res, next) => {
     const token = req.cookies.bravesubtoken;
-    console.log('TOKEN>>', token)
+    //console.log('PROTECT TOKEN>>', token)
   
     if (!token) {
       return res.status(401).json({ success: false, data: 'Not Allowed Please Login' });
@@ -30,6 +30,9 @@ export const Protect = async (req, res, next) => {
       }
       if (isUser.verified === false) {
         return res.status(404).json({ success: false, data: 'User Account is not verified' });
+      }
+      if (isUser.blocked === true) {
+        return res.status(404).json({ success: false, data: 'User Account has been blocked' });
       }
 
       req.user = isUser

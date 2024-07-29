@@ -51,7 +51,7 @@ export async function register(req, res) {
             return res.status(400).json({ success: false, data: 'Phone Number already exists. Please use another Phone Number' });
         }
 
-        const user = await UserModel.create({ firstName, lastName, username, email, password, mobile });
+        const user = await UserModel.create({ firstName, lastName, username, email, password, mobile, createdSource: 'web' });
         console.log('USER CREATED');
 
         const referralLink = `${process.env.CLIENT_URL}/register?ref=${user._id}`;
@@ -156,6 +156,8 @@ export async function login(req, res){
         } else {
             user = await UserModel.findOne({ mobile: emailOrMobile }).select('+password')
         }
+
+        console.log('USER NUMBER', user)
         
         if(!user){
             return res.status(401).json({ success: false, data: 'Invalid User'})
@@ -280,7 +282,6 @@ export async function forgotPassword (req, res, next){
                 subject: 'Password Reset Request',
                 text: emailTemplate
             })
-
             res.status(200).json({success: true, msg: 'Email sent', data: email })
         } catch (error) {
             user.resetPasswordToken = undefined

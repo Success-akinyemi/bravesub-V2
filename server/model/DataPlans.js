@@ -29,6 +29,10 @@ const DataPlansSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    costPrice: {
+        type: Number,
+        required: [true, 'Cost price is required']
+    },
     validity: {
         type: String,
         required: [true, 'Validity Period is required']

@@ -51,7 +51,7 @@ function ResetPassword() {
           setIsLoading(true)
           const res = await resetPassword(formData)
           if(res.success){
-              console.log('res', res)
+              toast.success(res.data)
               navigate("/login");
           }
       } catch (error) {
