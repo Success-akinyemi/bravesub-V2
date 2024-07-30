@@ -119,6 +119,7 @@ async function connectionLogic() {
                     if (jsonStart !== -1 && jsonEnd !== -1) {
                         try {
                             const jsonString = text.substring(jsonStart, jsonEnd + 1);
+                            console.log('JSON STRING', jsonString)
                             const validJsonString = jsonString
                                 .replace(/USERBUYDATA:/g, '"USERBUYDATA":')
                                 .replace(/USERBUYDATADATAPLAN:/g, '"USERBUYDATADATAPLAN":')
@@ -126,6 +127,7 @@ async function connectionLogic() {
                                 .replace(/USERBUYDATAPHONENUMBER:/g, '"USERBUYDATAPHONENUMBER":')
                                 .replace(/'/g, '"');
 
+                            console.log('JSON DATA INFO', validJsonString)
                             dataArray = JSON.parse(validJsonString);
                             console.log('DATA ARRAY INFO', dataArray)
 
