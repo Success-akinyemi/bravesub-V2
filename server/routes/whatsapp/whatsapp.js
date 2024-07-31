@@ -113,14 +113,14 @@ async function connectionLogic() {
     
                     if (jsonStart !== -1 && jsonEnd !== -1) {
                         try {
-                            const jsonString = text.substring(jsonStart, jsonEnd + 1);
+                            let jsonString = text.substring(jsonStart, jsonEnd + 1);
                             console.log('JSON STRING OBJECT', jsonString)
                             //convert to proper json
-                            properJson = jsonString
+                            jsonString = jsonString
                             .replace(/(\w+):/g, '"$1":')        
                             .replace(/'/g, '"'); 
-                            console.log('PROPER JSON', properJson)
-                            const jsonObject = JSON.parse(properJson);
+                            console.log('PROPER JSON', jsonString)
+                            const jsonObject = JSON.parse(jsonString);
                             // Assign values to the declared variables
                             USERBUYDATA = jsonObject.USERBUYDATA;
                             USERBUYDATADATAPLAN = jsonObject.USERBUYDATADATAPLAN;
