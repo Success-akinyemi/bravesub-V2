@@ -116,12 +116,17 @@ async function connectionLogic() {
                             const jsonString = text.substring(jsonStart, jsonEnd + 1);
                             console.log('JSON STRING', jsonString)
                             // Proper JSON formatting
+                            /**
+                             * 
                             const validJsonString = jsonString
                                 .replace(/([A-Za-z0-9]+):/g, '"$1":') // Enclose keys in double quotes
                                 .replace(/'/g, '"'); // Enclose string values in double quotes
     
                             console.log('JSON DATA INFO', validJsonString)
                             dataArray = JSON.parse(validJsonString);
+                             */
+
+                            dataArray = JSON.parse(jsonString);
                             console.log('DATA ARRAY INFO', dataArray)
     
                             // Assign values to the declared variables
