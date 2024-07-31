@@ -139,6 +139,22 @@ export async function buyAirtime(formData){
 }
 
 
+//FUNDING OF ACCOUNT FROM WHATSAPP
+export async function handleWhatappPay(formData){
+    try {
+        const res = await axios.post(`/funding/paystackFundingWhatsapp`, formData, {withCredentials: true})
+        const url = res.data.authorizationUrl
+        window.location.href = url
+
+    } catch (error) {
+        const errorMsg = error.response.data.data || 'Unable to Proccess Payment request'
+        toast.error(errorMsg)
+        //console.log('PAYMENT REQUEST', error)
+    }
+}
+
+
+
 
 //ADMIN ROUTES
 

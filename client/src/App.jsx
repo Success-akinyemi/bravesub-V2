@@ -24,6 +24,8 @@ import Users from './Admin/Users'
 import ViewUser from './Admin/Modal/ViewUser'
 import DataPlans from './Admin/DataPlans'
 import EditDataPlan from './Admin/Modal/EditDataPlan'
+import WhatsappPayment from './Pages/WhatsappPayment'
+import WhatsappVerifyPayment from './Pages/WhatsappVerifyPayment'
 
 
 function App() {
@@ -87,6 +89,10 @@ function App() {
           <Route path='/:id/verify/:token' element={<VerifyUser />} />
           <Route path='/reset-email-sent' element={<ResetEmailSent />} />
           <Route path='/reset-password/:resetToken' element={<ResetPassword formData={formData} setformData={setFormData} />} />
+
+          <Route path='/whatsapp/payment' element={<WhatsappPayment formData={formData} setformData={setFormData} />} />
+          <Route path='/whatsapp/verifyPayment' element={<WhatsappVerifyPayment />} />
+
 
           <Route element={<AuthorizeUser />}>
             <Route path='/dashboard' element={<Dashboard />} />

@@ -7,6 +7,8 @@ router.post('/paystackFunding', controllers.fundAcct)
 router.post('/paystackWebhook', controllers.paystackWebhook)
 router.post('/verifyPaystackPayment', controllers.verifyPaystackPayment)
 
+router.post('/paystackFundingWhatsapp', controllers.fundAcct)
+
 
 
 //PUT ROUTES

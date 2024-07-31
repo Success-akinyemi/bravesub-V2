@@ -25,7 +25,7 @@ export async function fundAcct(req, res) {
         {
           email,
           amount: fullAmount,
-          callback_url: `${process.env.CALLBACK_URL}`
+          callback_url: req.body.fromWhatsApp ? `${process.env.CALLBACK_URL3}` : `${process.env.CALLBACK_URL}`
         },
         {
           headers: {
