@@ -115,7 +115,12 @@ async function connectionLogic() {
                         try {
                             const jsonString = text.substring(jsonStart, jsonEnd + 1);
                             console.log('JSON STRING OBJECT', jsonString)
-                            const jsonObject = JSON.parse(jsonString);
+                            //convert to proper json
+                            properJson = jsonString
+                            .replace(/(\w+):/g, '"$1":')        
+                            .replace(/'/g, '"'); 
+                            console.log('PROPER JSON', properJson)
+                            const jsonObject = JSON.parse(properJson);
                             // Assign values to the declared variables
                             USERBUYDATA = jsonObject.USERBUYDATA;
                             USERBUYDATADATAPLAN = jsonObject.USERBUYDATADATAPLAN;
