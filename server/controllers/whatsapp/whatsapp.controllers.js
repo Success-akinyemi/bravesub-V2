@@ -20,6 +20,7 @@ export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, netwo
 
 export const fundAccount = async({ userConfirm, amount, userId }) => {
     const user = await UserModel.findOne({ mobile: userId })
+    console.log('FUND ACCOUNT')
     try {
         const paymentUrl = `${process.env.CLIENT_URL}/whatsapp/payment?amount=${amount}&email=${user?.email}`
         return `Alright ${user.username} kindly click on the link '\n' ${paymentUrl} '\n' to make the payment of ${amount} to fund your account`
