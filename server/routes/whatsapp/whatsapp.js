@@ -100,7 +100,7 @@ async function connectionLogic() {
                         for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the discountAllowed 
                         and important also analyze the the user chat to know what the user whats the service be rendered.
                         if you analyze and the user want to buy data in your response set:
-                        an array in this form [ USERBUYDATA: true, USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' ] only put the array in your response when you have analyze and collected the infomation for the array 
+                        an object in this form { USERBUYDATA: true, USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
                     `);
                     const response = await result.response;
                     const text = response.text();
@@ -114,7 +114,7 @@ async function connectionLogic() {
                     if (jsonStart !== -1 && jsonEnd !== -1) {
                         try {
                             const jsonString = text.substring(jsonStart, jsonEnd + 1);
-                            console.log('JSON STRING', jsonString)
+                            console.log('JSON STRING OBJECT', jsonString)
                             // Proper JSON formatting
                             /**
                              * 
@@ -126,14 +126,14 @@ async function connectionLogic() {
                             dataArray = JSON.parse(validJsonString);
                              */
 
-                            dataArray = JSON.parse(jsonString);
-                            console.log('DATA ARRAY INFO', dataArray)
+                            //dataArray = JSON.parse(jsonString);
+                            //console.log('DATA ARRAY INFO', dataArray)
     
                             // Assign values to the declared variables
-                            USERBUYDATA = dataArray[0].USERBUYDATA;
-                            USERBUYDATADATAPLAN = dataArray[0].USERBUYDATADATAPLAN;
-                            USERBUYDATANETWORK = dataArray[0].USERBUYDATANETWORK;
-                            USERBUYDATAPHONENUMBER = dataArray[0].USERBUYDATAPHONENUMBER;
+                            USERBUYDATA = jsonString.USERBUYDATA;
+                            USERBUYDATADATAPLAN = jsonString.USERBUYDATADATAPLAN;
+                            USERBUYDATANETWORK = jsonString.USERBUYDATANETWORK;
+                            USERBUYDATAPHONENUMBER = jsonString.USERBUYDATAPHONENUMBER;
     
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS
                             if (USERBUYDATA === true && USERBUYDATADATAPLAN && USERBUYDATANETWORK && USERBUYDATAPHONENUMBER && formattedNumber) {
