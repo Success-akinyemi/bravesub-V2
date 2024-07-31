@@ -115,25 +115,12 @@ async function connectionLogic() {
                         try {
                             const jsonString = text.substring(jsonStart, jsonEnd + 1);
                             console.log('JSON STRING OBJECT', jsonString)
-                            // Proper JSON formatting
-                            /**
-                             * 
-                            const validJsonString = jsonString
-                                .replace(/([A-Za-z0-9]+):/g, '"$1":') // Enclose keys in double quotes
-                                .replace(/'/g, '"'); // Enclose string values in double quotes
-    
-                            console.log('JSON DATA INFO', validJsonString)
-                            dataArray = JSON.parse(validJsonString);
-                             */
-
-                            //dataArray = JSON.parse(jsonString);
-                            //console.log('DATA ARRAY INFO', dataArray)
-    
+                            const jsonObject = JSON.parse(jsonString);
                             // Assign values to the declared variables
-                            USERBUYDATA = jsonString.USERBUYDATA;
-                            USERBUYDATADATAPLAN = jsonString.USERBUYDATADATAPLAN;
-                            USERBUYDATANETWORK = jsonString.USERBUYDATANETWORK;
-                            USERBUYDATAPHONENUMBER = jsonString.USERBUYDATAPHONENUMBER;
+                            USERBUYDATA = jsonObject.USERBUYDATA;
+                            USERBUYDATADATAPLAN = jsonObject.USERBUYDATADATAPLAN;
+                            USERBUYDATANETWORK = jsonObject.USERBUYDATANETWORK;
+                            USERBUYDATAPHONENUMBER = jsonObject.USERBUYDATAPHONENUMBER;
     
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS
                             if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null && USERBUYDATANETWORK !== null && USERBUYDATAPHONENUMBER !== null && formattedNumber !== '') {
