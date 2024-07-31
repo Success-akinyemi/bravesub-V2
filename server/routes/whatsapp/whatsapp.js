@@ -5,6 +5,7 @@ import UserModel from '../../model/User.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import WhatsappChatModel from '../../model/WhatsappUserMsg.js';
 import DataPlansModel from '../../model/DataPlans.js';
+import * as controllers from '../../controllers/whatsapp/whatsapp.controllers.js'
 
 const braveLiteAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 // const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
@@ -19,10 +20,14 @@ let USERBUYDATAPHONENUMBER = null;
 let USERBUYDATANETWORK = null;
 
 // Airtime
-let USERBUYAIRTIME = null;
+let USERBUYAIRTIME = false;
 let USERBUYAIRTIMEAMOUNT = null;
 let USERBUYAIRTIMEPHONENUMBER = null
 let USERBUYAIRTIMENETWORK = null
+
+//fund account
+let USERFUNDACCOUNT = false
+let USERFUNDACCOUNTAMOUNT = null
 
 const userPass = process.env.DEFAULT_PASSWORD;
 
@@ -86,7 +91,9 @@ async function connectionLogic() {
                     }
     
                     const findUserChat = await WhatsappChatModel.findOne({ userId: formattedNumber });
-    
+                    if(findUserChat){
+                        console.log('USERR CHAT FOUND', findUserChat.userId)
+                    }
                     const chat = braveLite.startChat({
                         history: findUserChat.history,
                         generationConfig: {
@@ -103,13 +110,15 @@ async function connectionLogic() {
                         for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the discountAllowed 
                         and important also analyze the the user chat to know what the user whats the service be rendered.
                         if you analyze and the user want to buy data in your response set:
-                        an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
+                        an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
                     
                         for airtime our networks are: MTN code: 1, AIRTEL code: 2, GLO code: 3, 9Mobile code: 4, send only the network to the user you will use the code to assign which network the user picks.
                         ask for the amount of airtime the user wants to buy minimium of 50 naira and maximium of 50,000 naira. ask for the phone Number also the user wants to buy for
                         if you analyze and the user want to buy airtime in your response set:
-                        an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
-                    
+                        an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
+                        
+                        if you analyze and the user want to fund their account in your response set:
+                        an object in this form { USERFUNDACCOUNT: 'set to true after you have confirm the user want to fund their account', USERFUNDACCOUNTAMOUNT: 'the amount the user wants to fund their account with'  }
                     `);
                     const response = await result.response;
                     const text = response.text();
@@ -144,15 +153,108 @@ async function connectionLogic() {
                             USERBUYAIRTIMEPHONENUMBER = jsonObject.USERBUYAIRTIMEPHONENUMBER
                             USERBUYAIRTIMENETWORK = jsonObject.USERBUYAIRTIMENETWORK
 
-                            // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
-                            if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null && USERBUYDATANETWORK !== null && USERBUYDATAPHONENUMBER !== null && formattedNumber !== '') {
-                                console.log('RESPONSE DATA (DATA)', USERBUYDATA, '\n', USERBUYDATADATAPLAN, '\n', USERBUYDATANETWORK, '\n', USERBUYDATAPHONENUMBER, '\n', formattedNumber);
-                            }
+                            // Assign values to the declared variables of account funding
+                            USERFUNDACCOUNT = jsonObject.USERFUNDACCOUNT
+                            USERFUNDACCOUNTAMOUNT = jsonObject.USERFUNDACCOUNTAMOUNT
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
-                            if (USERBUYAIRTIME === true && USERBUYAIRTIMEAMOUNT !== null && USERBUYAIRTIMEPHONENUMBER !== null && USERBUYAIRTIMENETWORK !== null && formattedNumber !== '') {
-                                console.log('RESPONSE DATA (AIRTIME)', USERBUYAIRTIME, '\n', USERBUYAIRTIMEAMOUNT, '\n', USERBUYAIRTIMEPHONENUMBER, '\n', USERBUYAIRTIMENETWORK, '\n', formattedNumber);
+                            async function handleData(){
+                                if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null && USERBUYDATANETWORK !== null && USERBUYDATAPHONENUMBER !== null && formattedNumber !== '') {
+                                    console.log('RESPONSE DATA (DATA)', USERBUYDATA, '\n', USERBUYDATADATAPLAN, '\n', USERBUYDATANETWORK, '\n', USERBUYDATAPHONENUMBER, '\n', formattedNumber);
+                                    try {
+                                        const responseMsg = await controllers.buyData({
+                                            userConfirm:USERBUYDATA,
+                                            planCode: USERBUYDATADATAPLAN,
+                                            networkCode: USERBUYDATANETWORK,
+                                            phoneNumber: USERBUYDATAPHONENUMBER,
+                                            userId: formattedNumber
+                                        })
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: responseMsg,
+                                            }
+                                        );
+                                        USERBUYDATA = false;
+                                        USERBUYDATADATAPLAN = null;
+                                        USERBUYDATAPHONENUMBER = null;
+                                        USERBUYDATANETWORK = null;
+                                    } catch (errorMsg) {
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: errorMsg,
+                                            }
+                                        );   
+                                    }
+                                }
                             }
+                            handleData()
+
+                            // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
+                            async function handleAirtime(){
+                                if (USERBUYAIRTIME === true && USERBUYAIRTIMEAMOUNT !== null && USERBUYAIRTIMEPHONENUMBER !== null && USERBUYAIRTIMENETWORK !== null && formattedNumber !== '') {
+                                    console.log('RESPONSE DATA (AIRTIME)', USERBUYAIRTIME, '\n', USERBUYAIRTIMEAMOUNT, '\n', USERBUYAIRTIMEPHONENUMBER, '\n', USERBUYAIRTIMENETWORK, '\n', formattedNumber);
+                                    try {
+                                        const responseMsg = await controllers.buyAirtime({
+                                            userConfirm: USERBUYAIRTIME,
+                                            airtimeAmount: USERBUYAIRTIMEAMOUNT,
+                                            phoneNumber: USERBUYAIRTIMEPHONENUMBER,
+                                            networkCode: USERBUYAIRTIMENETWORK,
+                                            userId: formattedNumber
+                                        })
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: responseMsg,
+                                            }
+                                        );
+                                        USERBUYAIRTIME = false;
+                                        USERBUYAIRTIMEAMOUNT = null;
+                                        USERBUYAIRTIMEPHONENUMBER = null
+                                        USERBUYAIRTIMENETWORK = null
+                                    } catch (errorMsg) {
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: errorMsg,
+                                            }
+                                        );
+                                    }
+                                }
+                            }
+                            handleAirtime()
+
+                            // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (FUND ACCOUNT)
+                             async function handleFunding() {
+                                if (USERFUNDACCOUNT === true && USERFUNDACCOUNTAMOUNT !== null && formattedNumber !== '') {
+                                    console.log('RESPONSE DATA (ACCOUNT FUNDING)', USERFUNDACCOUNT, '\n', USERFUNDACCOUNTAMOUNT, formattedNumber);
+                                    try {
+                                        const responseMsg = await controllers.fundAccount({
+                                            userConfirm: USERFUNDACCOUNT,
+                                            amount: USERFUNDACCOUNTAMOUNT,
+                                            userId: formattedNumber
+                                        });
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: responseMsg,
+                                            }
+                                        );
+                                        USERFUNDACCOUNT = false
+                                        USERFUNDACCOUNTAMOUNT = null
+                                    } catch (errorMsg) {
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: errorMsg,
+                                            }
+                                        );
+                                    }
+                                }
+                            }                            
+                            handleFunding();
+                            
     
                             // Remove JSON array from the final message
                             const finalMessage = text.replace(trimmedMsg, '').trim();
