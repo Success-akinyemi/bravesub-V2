@@ -20,6 +20,9 @@ let USERBUYDATANETWORK = null;
 
 // Airtime
 let USERBUYAIRTIME = null;
+let USERBUYAIRTIMEAMOUNT = null;
+let USERBUYAIRTIMEPHONENUMBER = null
+let USERBUYAIRTIMENETWORK = null
 
 const userPass = process.env.DEFAULT_PASSWORD;
 
@@ -100,7 +103,13 @@ async function connectionLogic() {
                         for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the discountAllowed 
                         and important also analyze the the user chat to know what the user whats the service be rendered.
                         if you analyze and the user want to buy data in your response set:
-                        an object in this form { USERBUYDATA: true, USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
+                        an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
+                    
+                        for airtime our networks are: MTN code: 1, AIRTEL code: 2, GLO code: 3, 9Mobile code: 4, send only the network to the user you will use the code to assign which network the user picks.
+                        ask for the amount of airtime the user wants to buy minimium of 50 naira and maximium of 50,000 naira. ask for the phone Number also the user wants to buy for
+                        if you analyze and the user want to buy airtime in your response set:
+                        an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
+                    
                     `);
                     const response = await result.response;
                     const text = response.text();
@@ -109,11 +118,13 @@ async function connectionLogic() {
                     // Extract JSON string if it exists
                     const jsonStart = text.indexOf("{");
                     const jsonEnd = text.indexOf("}");
-                    let dataArray;
+                    let trimmedMsg;
     
                     if (jsonStart !== -1 && jsonEnd !== -1) {
                         try {
                             let jsonString = text.substring(jsonStart, jsonEnd + 1);
+                            trimmedMsg = text.substring(jsonStart, jsonEnd + 1);
+
                             console.log('JSON STRING OBJECT', jsonString)
                             //convert to proper json
                             jsonString = jsonString
@@ -121,19 +132,30 @@ async function connectionLogic() {
                             .replace(/'/g, '"'); 
                             console.log('PROPER JSON', jsonString)
                             const jsonObject = JSON.parse(jsonString);
-                            // Assign values to the declared variables
+                            // Assign values to the declared variables of data
                             USERBUYDATA = jsonObject.USERBUYDATA;
                             USERBUYDATADATAPLAN = jsonObject.USERBUYDATADATAPLAN;
                             USERBUYDATANETWORK = jsonObject.USERBUYDATANETWORK;
                             USERBUYDATAPHONENUMBER = jsonObject.USERBUYDATAPHONENUMBER;
-    
-                            // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS
+                            
+                            // Assign values to the declared variables of airtime
+                            USERBUYAIRTIME = jsonObject.USERBUYAIRTIME
+                            USERBUYAIRTIMEAMOUNT = jsonObject.USERBUYAIRTIMEAMOUNT
+                            USERBUYAIRTIMEPHONENUMBER = jsonObject.USERBUYAIRTIMEPHONENUMBER
+                            USERBUYAIRTIMENETWORK = jsonObject.USERBUYAIRTIMENETWORK
+
+                            // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
                             if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null && USERBUYDATANETWORK !== null && USERBUYDATAPHONENUMBER !== null && formattedNumber !== '') {
-                                console.log('RESPONSE DATA', USERBUYDATA, '\n', USERBUYDATADATAPLAN, '\n', USERBUYDATANETWORK, '\n', USERBUYDATAPHONENUMBER, '\n', formattedNumber);
+                                console.log('RESPONSE DATA (DATA)', USERBUYDATA, '\n', USERBUYDATADATAPLAN, '\n', USERBUYDATANETWORK, '\n', USERBUYDATAPHONENUMBER, '\n', formattedNumber);
+                            }
+
+                            // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
+                            if (USERBUYAIRTIME === true && USERBUYAIRTIMEAMOUNT !== null && USERBUYAIRTIMEPHONENUMBER !== null && USERBUYAIRTIMENETWORK !== null && formattedNumber !== '') {
+                                console.log('RESPONSE DATA (AIRTIME)', USERBUYAIRTIME, '\n', USERBUYAIRTIMEAMOUNT, '\n', USERBUYAIRTIMEPHONENUMBER, '\n', USERBUYAIRTIMENETWORK, '\n', formattedNumber);
                             }
     
                             // Remove JSON array from the final message
-                            const finalMessage = text.replace(jsonString, '').trim();
+                            const finalMessage = text.replace(trimmedMsg, '').trim();
     
                             if (finalMessage) {
                                 await sock.sendMessage(
