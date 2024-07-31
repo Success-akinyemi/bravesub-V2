@@ -59,10 +59,49 @@ async function connectionLogic() {
                     const captureMessage = messages[0]?.message?.conversation;
                     const numberWa = messages[0].key?.remoteJid;
                     const senderName = messages[0]?.pushName;
+                    function getFormattedPhoneNumber(phoneNumber) {
+                        let formattedNumber = '0' + phoneNumber.slice(3, phoneNumber.indexOf('@'));
+                        return formattedNumber;
+                    }
     
-                    // Rest of your message handling logic...
+                    const formattedNumber = getFormattedPhoneNumber(numberWa);
+                    const compareMessage = captureMessage.toLocaleLowerCase();
     
-                    const result = await chat.sendMessage(`... your message content ...`);
+                    const checkNumber = await UserModel.findOne({ mobile: formattedNumber });
+                    if (!checkNumber) {
+                        await UserModel.create({
+                            mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`
+                        });
+                    }
+    
+                    const getUser = await UserModel.findOne({ mobile: formattedNumber });
+                    const findChats = await WhatsappChatModel.findOne({ userId: formattedNumber });
+                    const dataPlans = await DataPlansModel.find();
+    
+                    if (!findChats) {
+                        await WhatsappChatModel.create({ userId: formattedNumber });
+                    }
+    
+                    const findUserChat = await WhatsappChatModel.findOne({ userId: formattedNumber });
+    
+                    const chat = braveLite.startChat({
+                        history: findUserChat.history,
+                        generationConfig: {
+                            maxOutputTokens: 1000,
+                        },
+                    });
+    
+                    const result = await chat.sendMessage(`
+                        you are a sales rep for a company name Bravesub. a company that sells mobile airtime, internet data, buy cable tv subscription, and pay electricity bill. 
+                        and and your name is BraveLite you are to maintain a quality chat with our users and their chat histroy you have with them. this is the new message: ${captureMessage}. 
+                        the customer username is ${senderName} and a object of the database infomation in object form is ${getUser}. 
+                        the information given to you is for you to use and process your reply must be good to keep the user going and continue using based on your conversation with the customer do not give out example of conversation as output it is a real life chat and you must continue to chat with user the information given to you is to make good decisions while chatting with the user.
+                        
+                        for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the discountAllowed 
+                        and important also analyze the the user chat to know what the user whats the service be rendered.
+                        if you analyze and the user want to buy data in your response set:
+                        an array in this form [ USERBUYDATA: true, USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' ] only put the array in your response when you have analyze and collected the infomation for the array 
+                    `);
                     const response = await result.response;
                     const text = response.text();
                     console.log('MESSAGE FROM GEMINI:', text);
@@ -100,9 +139,12 @@ async function connectionLogic() {
                             const finalMessage = text.replace(jsonString, '').trim();
     
                             if (finalMessage) {
-                                await sock.sendMessage(numberWa, {
-                                    text: finalMessage,
-                                });
+                                await sock.sendMessage(
+                                    numberWa, 
+                                    {
+                                        text: finalMessage,
+                                    }
+                                );
                             }
                         } catch (error) {
                             console.error('Failed to parse JSON:', error);
@@ -112,7 +154,9 @@ async function connectionLogic() {
                         }
                     } else {
                         // If no JSON string is found, send the original text
-                        await sock.sendMessage(numberWa, {
+                        await sock.sendMessage(
+                            numberWa, 
+                            {
                             text: text,
                         });
                     }
