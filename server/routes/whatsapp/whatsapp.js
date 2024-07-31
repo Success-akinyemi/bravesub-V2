@@ -107,8 +107,8 @@ async function connectionLogic() {
                     console.log('MESSAGE FROM GEMINI:', text);
                     
                     // Extract JSON string if it exists
-                    const jsonStart = text.indexOf("[");
-                    const jsonEnd = text.indexOf("]");
+                    const jsonStart = text.indexOf("{");
+                    const jsonEnd = text.indexOf("}");
                     let dataArray;
     
                     if (jsonStart !== -1 && jsonEnd !== -1) {
