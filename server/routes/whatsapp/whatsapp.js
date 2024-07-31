@@ -13,13 +13,13 @@ const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 // Declare variables to monitor the last chat of the bot and get the keywords, intercept message flow, and carry out transactions
 // Data
-let USERBUYDATA = '';
-let USERBUYDATADATAPLAN = '';
-let USERBUYDATAPHONENUMBER = '';
-let USERBUYDATANETWORK = '';
+let USERBUYDATA = false;
+let USERBUYDATADATAPLAN = null;
+let USERBUYDATAPHONENUMBER = null;
+let USERBUYDATANETWORK = null;
 
 // Airtime
-let USERBUYAIRTIME = '';
+let USERBUYAIRTIME = null;
 
 const userPass = process.env.DEFAULT_PASSWORD;
 
@@ -136,7 +136,7 @@ async function connectionLogic() {
                             USERBUYDATAPHONENUMBER = jsonString.USERBUYDATAPHONENUMBER;
     
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS
-                            if (USERBUYDATA === true && USERBUYDATADATAPLAN && USERBUYDATANETWORK && USERBUYDATAPHONENUMBER && formattedNumber) {
+                            if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null && USERBUYDATANETWORK !== null && USERBUYDATAPHONENUMBER !== null && formattedNumber !== '') {
                                 console.log('RESPONSE DATA', USERBUYDATA, '\n', USERBUYDATADATAPLAN, '\n', USERBUYDATANETWORK, '\n', USERBUYDATAPHONENUMBER, '\n', formattedNumber);
                             }
     
