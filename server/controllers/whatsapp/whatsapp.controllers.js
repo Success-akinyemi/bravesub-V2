@@ -5,6 +5,7 @@ export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, 
 
         return ``
     } catch (error){
+        console.log('WHATSAPP ERROR (BUY DATA)', error)
         return `Failed Unable to buy data`
     }
 }
@@ -14,6 +15,7 @@ export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, netwo
         
         return ``
     } catch (error) {
+        console.log('WHATSAPP ERROR (BUY AIRTIME)', error)
         return ``
     }
 }
@@ -25,6 +27,7 @@ export const fundAccount = async({ userConfirm, amount, userId }) => {
         const paymentUrl = `${process.env.CLIENT_URL}/whatsapp/payment?amount=${amount}&email=${user?.email}`
         return `Alright ${user.username} kindly click on the link '\n' ${paymentUrl} '\n' to make the payment of ${amount} to fund your account`
     } catch (error) {
+        console.log('WHATSAPP ERROR (FUND ACCOUNT)', error)
         return `Sorry ${user.username}, unable to create a payment link`
     }
 }
@@ -46,6 +49,7 @@ export const handleReferral = async({userConfirm, referreeId, userId}) => {
         
         return `Great ${user.username}, you were referred by ${findReferrer.username} enjoy amazing cashbacks and bonus when you by Data, Airtime, Cable Tv Subscription and Pay Electric bills from me.`
     } catch (error) {
+        console.log('WHATSAPP ERROR (REFERRED BY SOMEONE)', error)
         return `Sorry ${user.username}, unable to process the referral request`
     }
 }

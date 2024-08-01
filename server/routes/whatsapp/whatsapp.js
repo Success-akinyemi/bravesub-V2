@@ -87,7 +87,7 @@ async function connectionLogic() {
                         
                         //create a whatsapp referal link for user
                         const whatsRefLink = `https://wa.me/2349033626014?text=Hello%20BraveLite%20I%20was%20referred%20by%20userId%3A${checkNumber._id}`
-                        checkNumber.whatsappReferralLink = referralLink;
+                        checkNumber.whatsappReferralLink = whatsRefLink;
                         await checkNumber.save();
 
                         const referralLink = `${process.env.CLIENT_URL}/register?ref=${checkNumber._id}`;
@@ -101,7 +101,7 @@ async function connectionLogic() {
                     }
                     if(!checkNumber.whatsappReferralLink){
                         const whatsRefLink = `https://wa.me/2349033626014?text=Hello%20BraveLite%20I%20was%20referred%20by%20userId%3A${checkNumber._id}`
-                        checkNumber.whatsappReferralLink = referralLink;
+                        checkNumber.whatsappReferralLink = whatsRefLink;
                         await checkNumber.save();
                     }
     
@@ -288,7 +288,7 @@ async function connectionLogic() {
                             //// CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (USER REFERRED BY SOMEONE)
                             async function handleReferral() {
                                 if (USERREFERRED === true && USERREFERREE !== null && formattedNumber !== '') {
-                                    console.log('RESPONSE DATA (ACCOUNT FUNDING)', USERREFERRED, '\n', USERREFERREE, formattedNumber);
+                                    console.log('RESPONSE DATA (REFERRAL)', USERREFERRED, '\n', USERREFERREE, formattedNumber);
                                     try {
                                         const responseMsg = await controllers.handleReferral({
                                             userConfirm: USERREFERRED,
