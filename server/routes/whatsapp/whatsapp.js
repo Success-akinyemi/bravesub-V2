@@ -29,6 +29,10 @@ let USERBUYAIRTIMENETWORK = null
 let USERFUNDACCOUNT = false
 let USERFUNDACCOUNTAMOUNT = null
 
+//referal
+let USERREFERRED = false
+let USERREFERREE = null
+
 const userPass = process.env.DEFAULT_PASSWORD;
 
 async function connectionLogic() {
@@ -80,6 +84,25 @@ async function connectionLogic() {
                         await UserModel.create({
                             mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`
                         });
+                        
+                        //create a whatsapp referal link for user
+                        const whatsRefLink = `https://wa.me/2349033626014?text=Hello%20BraveLite%20I%20was%20referred%20by%20userId%3A${checkNumber._id}`
+                        checkNumber.whatsappReferralLink = referralLink;
+                        await checkNumber.save();
+
+                        const referralLink = `${process.env.CLIENT_URL}/register?ref=${checkNumber._id}`;
+                        checkNumber.referralLink = referralLink;
+                        await checkNumber.save();
+                    }
+                    if(!checkNumber.referralLink){
+                        const referralLink = `${process.env.CLIENT_URL}/register?ref=${checkNumber._id}`;
+                        checkNumber.referralLink = referralLink;
+                        await checkNumber.save();   
+                    }
+                    if(!checkNumber.whatsappReferralLink){
+                        const whatsRefLink = `https://wa.me/2349033626014?text=Hello%20BraveLite%20I%20was%20referred%20by%20userId%3A${checkNumber._id}`
+                        checkNumber.whatsappReferralLink = referralLink;
+                        await checkNumber.save();
                     }
     
                     const getUser = await UserModel.findOne({ mobile: formattedNumber });
@@ -119,6 +142,9 @@ async function connectionLogic() {
                         
                         if you analyze and the user want to fund their account in your response set:
                         an object in this form { USERFUNDACCOUNT: 'set to true after you have confirm the user want to fund their account', USERFUNDACCOUNTAMOUNT: 'the amount the user wants to fund their account with'  }
+                    
+                        ifyou analyze and the user talks about been reffered by someone their message will contain the userId of the person that referred the in your response set:
+                        an object in this form { USERREFERRED: true, USERREFERREE: 'the user id of the person that referred them contain in the message'  }
                     `);
                     const response = await result.response;
                     const text = response.text();
@@ -156,6 +182,10 @@ async function connectionLogic() {
                             // Assign values to the declared variables of account funding
                             USERFUNDACCOUNT = jsonObject.USERFUNDACCOUNT
                             USERFUNDACCOUNTAMOUNT = jsonObject.USERFUNDACCOUNTAMOUNT
+
+                            // Assign values to the declared variables of account funding
+                            USERREFERRED = jsonObject.USERREFERRED
+                            USERREFERREE = jsonObject.USERREFERREE
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
                             async function handleData(){
@@ -254,6 +284,36 @@ async function connectionLogic() {
                                 }
                             }                            
                             handleFunding();
+
+                            //// CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (USER REFERRED BY SOMEONE)
+                            async function handleReferral() {
+                                if (USERREFERRED === true && USERREFERREE !== null && formattedNumber !== '') {
+                                    console.log('RESPONSE DATA (ACCOUNT FUNDING)', USERREFERRED, '\n', USERREFERREE, formattedNumber);
+                                    try {
+                                        const responseMsg = await controllers.handleReferral({
+                                            userConfirm: USERREFERRED,
+                                            referreeId: USERREFERREE,
+                                            userId: formattedNumber
+                                        });
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: responseMsg,
+                                            }
+                                        );
+                                        USERREFERRED = false
+                                        USERREFERREE = null
+                                    } catch (errorMsg) {
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: errorMsg,
+                                            }
+                                        );
+                                    }
+                                }
+                            }                            
+                            handleReferral();
                             
     
                             // Remove JSON array from the final message

@@ -8,6 +8,10 @@ export async function fundAcct(req, res) {
       if(!email){
         return res.status(404).json({ success: false, data: 'Email Address is required'})
       }
+      const userExist = await UserModel.findOne({ email: email })
+      if(!userExist){
+        return res.status(404).json({ success: false, data: 'Email address does not exist' })
+      }
       if(!amount){
         return res.status(404).json({ success: false, data: 'Amount is required'})
       }
@@ -95,6 +99,7 @@ export async function paystackWebhook(req, res) {
 
 export async function verifyPaystackPayment(req, res){
     const { paymentReference } = req.body
+    console.log('REFF',paymentReference)
     try {
         if(!paymentReference){
             return res.status(404).json({ success: false, data: 'Invalid Payment refrence'})
@@ -110,7 +115,7 @@ export async function verifyPaystackPayment(req, res){
             }
           );
       
-          console.log('VERIFY DATA>>',response.data);
+          //console.log('VERIFY DATA>>',response.data);
           const data = response.data.data
           if(data.status !== 'success' && data.gateway_response !== 'Successful'){
             return res.status(403).json({ success: false, data: 'Invalid'})
@@ -121,6 +126,9 @@ export async function verifyPaystackPayment(req, res){
           const reference = data.reference
 
           const user = await UserModel.findOne({ email });
+          if(!user){
+            console.log('USER NOT FOUND', email)
+          }
           const transactionExist = await TransactionModel.findOne({ transactionId: reference })
         
           if(transactionExist){
@@ -147,7 +155,7 @@ export async function verifyPaystackPayment(req, res){
                 credit: true
             };
             const createdTransaction = await TransactionModel.create(transactionData);
-            console.log('Transaction>>', createdTransaction)
+            //console.log('Transaction>>', createdTransaction)
         }
 
         const { resetPasswordToken, resetPasswordExpire, password, ...userData } = user._doc

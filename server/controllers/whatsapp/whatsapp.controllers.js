@@ -28,3 +28,24 @@ export const fundAccount = async({ userConfirm, amount, userId }) => {
         return `Sorry ${user.username}, unable to create a payment link`
     }
 }
+
+export const handleReferral = async({userConfirm, referreeId, userId}) => {
+    const user = await UserModel.findOne({ mobile: userId })
+    try {
+        if(referreeId === user._id){
+            return `Unfortunatley ${user.username}, you cannot refer yourself please share the link with others.`
+        }
+        const findReferrer = await UserModel.findById({ _id: referreeId })
+        if(!findReferrer){
+            return `Sorry ${user.username}, no user found with the id provided please re-confirm id`
+        }
+        findReferrer.referrals.push(user._id);
+        await referrer.save();
+        user.referredBy = findReferrer._id;
+        await user.save();
+        
+        return `Great ${user.username}, you were referred by ${findReferrer.username} enjoy amazing cashbacks and bonus when you by Data, Airtime, Cable Tv Subscription and Pay Electric bills from me.`
+    } catch (error) {
+        return `Sorry ${user.username}, unable to process the referral request`
+    }
+}

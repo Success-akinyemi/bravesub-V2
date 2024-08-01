@@ -1,10 +1,11 @@
 import { useLocation } from "react-router-dom";
 import { verifyPaystackPayment } from "../Helpers/api";
-import { useEffect } from "react";
+import { useEffect, useState  } from "react";
 import LogoImg from '../assets/logo.png'
 
 function WhatsappVerifyPayment() {
     const location = useLocation();
+    const [ text, setText ] = useState('Verifying Payment please wait...')
   
     useEffect(() => {
         const query = new URLSearchParams(location.search);
@@ -17,7 +18,9 @@ function WhatsappVerifyPayment() {
               //console.log('Server response:', res.data);
               if(res.success){
                 toast.success('Account Funding Successful')
+                setText('Payment Verified... redirecting to whatsapp')
                 //redirect back to whatsapp
+                window.location.href = 'https://wa.me/2349033626014'
               }
             } catch (error) {
               console.error('Error posting payment reference:', error);
@@ -36,7 +39,7 @@ function WhatsappVerifyPayment() {
         </div>
         <div className="flex flex-col items-center justify-center p-4 bg-white shadow-xl gap-3 rounded-xl">
             <div className="flex flex-col">
-                <p className="mb-4">Verifying Payment please wait...</p>
+                <p className="mb-4">{text}</p>
                 <div className="loading"></div>
             </div>
         </div>

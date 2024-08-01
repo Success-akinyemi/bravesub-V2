@@ -53,11 +53,11 @@ function WhatsappPayment({formData, setformData}) {
     <div className='flex flex-col p-6 bg-white rounded-3xl shadow-xl gap-10 w-[50vw] phone:w-[85vw]' >
         <div className="inputGroup">
             <label className='font-semibold phone:text-[15px]' htmlFor="Email Address">Email Address</label>
-            <input className='text-[18px] phone:text-[17px]' onChange={handleInputs} type="email" id="email" defaultValue={email} />
+            <input className='text-[18px] phone:text-[17px]' disabled onChange={handleInputs} type="email" id="email" defaultValue={email} />
         </div>
 
         <div className="inputGroup">
-            <label className='font-semibold phone:text-[15px]' htmlFor="Email Address or Phone Number">Amount</label>
+            <label className='font-semibold phone:text-[15px]' htmlFor="Amount">Amount</label>
             <input className='text-[18px] phone:text-[17px]' onChange={handleInputs} type="number" id="amount" defaultValue={amount} />
         </div>
 

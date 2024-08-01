@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import crypto from 'crypto'
 import bcryptjs from 'bcryptjs'
 import jsonwebtoken from 'jsonwebtoken'
+import { type } from "os";
 
 export const UserSchema = new mongoose.Schema({
     username: {
@@ -41,6 +42,9 @@ export const UserSchema = new mongoose.Schema({
         default: 0,
     },
     referralLink: {
+        type: String
+    },
+    whatsappReferralLink: {
         type: String
     },
     referredBy: {

@@ -7,6 +7,11 @@ const WhatsappChatSchema = new mongoose.Schema({
     },
     history: {
         type: Array
+    },
+    createdAt:{
+        type: Date,
+        default: Date.now(),
+        expires: 86400 //24Hour
     }
 })
 
