@@ -228,6 +228,10 @@ async function connectionLogic() {
                                                 text: errorMsg,
                                             }
                                         );   
+                                        USERBUYDATA = false;
+                                        USERBUYDATADATAPLAN = null;
+                                        USERBUYDATAPHONENUMBER = null;
+                                        USERBUYDATANETWORK = null;
                                     }
                                 }
                             }
@@ -264,6 +268,10 @@ async function connectionLogic() {
                                                 text: errorMsg,
                                             }
                                         );
+                                        USERBUYAIRTIME = false;
+                                        USERBUYAIRTIMEAMOUNT = null;
+                                        USERBUYAIRTIMEPHONENUMBER = null
+                                        USERBUYAIRTIMENETWORK = null
                                     }
                                 }
                             }
