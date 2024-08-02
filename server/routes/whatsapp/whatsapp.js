@@ -210,14 +210,12 @@ async function connectionLogic() {
                                             userId: formattedNumber
                                         })
                                         console.log('DATA RESPONSE MESSAGE>>>:', responseMsg);
-                                        if(responseMsg){
-                                            await sock.sendMessage(
-                                                numberWa,
-                                                {
-                                                    text: responseMsg,
-                                                }
-                                            );
-                                        }
+                                        await sock.sendMessage(
+                                            numberWa,
+                                            {
+                                                text: responseMsg,
+                                            }
+                                        );
                                         USERBUYDATA = false;
                                         USERBUYDATADATAPLAN = null;
                                         USERBUYDATAPHONENUMBER = null;
