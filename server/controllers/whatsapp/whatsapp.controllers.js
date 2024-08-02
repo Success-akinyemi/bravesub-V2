@@ -5,7 +5,7 @@ export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, 
     console.log('BUY DATA')
     try{
 
-        return `data coming soon`
+        return `Alright ${user.username} data coming soon`
     } catch (error){
         console.log('WHATSAPP ERROR (BUY DATA)', error)
         return `Failed Unable to buy data`
@@ -17,10 +17,10 @@ export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, netwo
     console.log('BUY AIRTIME')
     try {
         
-        return `Airtime coming soon`
+        return `Alright ${user.username} Airtime coming soon`
     } catch (error) {
         console.log('WHATSAPP ERROR (BUY AIRTIME)', error)
-        return ``
+        return `Failed unable to buy airtime`
     }
 }
 
@@ -38,6 +38,7 @@ export const fundAccount = async({ userConfirm, amount, userId }) => {
 
 export const handleReferral = async({userConfirm, referreeId, userId}) => {
     const user = await UserModel.findOne({ mobile: userId })
+    console.log('HANDLE REFERRAL')
     try {
         if(referreeId === user._id){
             return `Unfortunatley ${user.username}, you cannot refer yourself please share the link with others.`
