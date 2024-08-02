@@ -127,7 +127,7 @@ async function connectionLogic() {
                     const firstPrompt = `
                         you are a sales rep for a company name Bravesub. a company that sells mobile airtime, internet data, buy cable tv subscription, and pay electricity bill. 
                         and and your name is BraveLite you are to maintain a quality chat with our users and their chat histroy you have with them. this is the new message: ${captureMessage}. 
-                        the customer username is ${senderName} and a object of the database infomation in object form is ${getUser}. 
+                        the customer username is ${senderName} and a object of the database infomation of the customer in object form is ${getUser}. 
                         the information given to you is for you to use and process your reply must be good to keep the user going and continue using based on your conversation with the customer do not give out example of conversation as output it is a real life chat and you must continue to chat with user the information given to you is to make good decisions while chatting with the user.
                         
                         for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the discountAllowed 
@@ -149,8 +149,12 @@ async function connectionLogic() {
                         if you analyze and the user message talks about been reffered by someone their message will contain the userId of the person that referred the in your response set:
                         an object in this form { USERREFERRED: true, USERREFERREE: 'the userId of the person that referred them contain in the message'  }
                     `
+
+                    const secondPrompt = `
+                        based on your very first prompt given to you to work with it the current customer details in object form is: ${getUser} and customer username is ${senderName} continue workig with the first prompt as guide also with the current updated data. the new customer message is: ${captureMessage}
+                    `
     
-                    const result = await chat.sendMessage(findUserChat.history.length > 0 ? captureMessage : firstPrompt );
+                    const result = await chat.sendMessage(findUserChat.history.length > 0 ? secondPrompt : firstPrompt );
                     const response = await result.response;
                     const text = response.text();
                     console.log('MESSAGE FROM GEMINI:', text);
