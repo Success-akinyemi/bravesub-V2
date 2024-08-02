@@ -153,6 +153,7 @@ async function connectionLogic() {
 
                     const secondPrompt = `
                         based on your very first prompt given to you to work with it the current customer details in object form is: ${getUser} and customer username is ${senderName} continue workig with the first prompt as guide also with the current updated data. the new customer message is: ${captureMessage}
+                        always remember to keep track of the conversation and analyze the chat to fill the corresponding json object appropriately
                     `
     
                     const result = await chat.sendMessage(findUserChat.history.length > 0 ? secondPrompt : firstPrompt );
