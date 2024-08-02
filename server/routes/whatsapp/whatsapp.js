@@ -70,6 +70,7 @@ async function connectionLogic() {
                 if (!messages[0]?.key.fromMe) {
                     const captureMessage = messages[0]?.message?.conversation;
                     const numberWa = messages[0].key?.remoteJid;
+                    console.log('WHATSAPPNUMBER', numberWa)
                     const senderName = messages[0]?.pushName;
                     function getFormattedPhoneNumber(phoneNumber) {
                         let formattedNumber = '0' + phoneNumber.slice(3, phoneNumber.indexOf('@'));
@@ -362,6 +363,11 @@ async function connectionLogic() {
             }
         } catch (error) {
             console.log('UNABLE TO REPLY MESSAGE', error);
+            await sock.sendMessage(
+                process.env.WHATSAPPNUMBER, 
+                {
+                text: `ERROR FORM WHATSAPP BOT SUCCESS '\n' ${error}`,
+            });
         }
     });
     
