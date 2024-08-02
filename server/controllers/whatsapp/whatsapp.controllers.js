@@ -5,7 +5,7 @@ export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, 
         const user = await UserModel.findOne({ mobile: userId })
         console.log('BUY DATA')
         const mobileRegex = /^(090|080|070)\d{8}$/;
-        if (!mobileRegex.test(mobphoneNumberile)) {
+        if (!mobileRegex.test(phoneNumber)) {
             return `Unfortunately ${user.username}, ${phoneNumber} is not a valid phone number`;
         }
 
@@ -21,7 +21,7 @@ export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, netwo
         const user = await UserModel.findOne({ mobile: userId })
         console.log('BUY AIRTIME')
         const mobileRegex = /^(090|080|070)\d{8}$/;
-        if (!mobileRegex.test(mobphoneNumberile)) {
+        if (!mobileRegex.test(phoneNumber)) {
             return `Unfortunately ${user.username}, ${phoneNumber} is not a valid phone number`;
         }
         
