@@ -194,7 +194,7 @@ async function connectionLogic() {
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
                             async function handleData(){
-                                if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null || '' && USERBUYDATANETWORK !== null || '' && USERBUYDATAPHONENUMBER !== null || '' && formattedNumber !== '') {
+                                if (USERBUYDATA === true && (USERBUYDATADATAPLAN !== null && USERBUYDATADATAPLAN !== '') && (USERBUYDATANETWORK !== null && USERBUYDATANETWORK !==  '') && (USERBUYDATAPHONENUMBER !== null && USERBUYDATAPHONENUMBER !== '') && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (DATA)', USERBUYDATA, '\n', USERBUYDATADATAPLAN, '\n', USERBUYDATANETWORK, '\n', USERBUYDATAPHONENUMBER, '\n', formattedNumber);
                                     try {
                                         const responseMsg = await controllers.buyData({
@@ -228,7 +228,7 @@ async function connectionLogic() {
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
                             async function handleAirtime(){
-                                if (USERBUYAIRTIME === true && USERBUYAIRTIMEAMOUNT !== null || '' && USERBUYAIRTIMEPHONENUMBER !== null || '' && USERBUYAIRTIMENETWORK !== null || '' && formattedNumber !== '') {
+                                if (USERBUYAIRTIME === true && (USERBUYAIRTIMEAMOUNT !== null && USERBUYAIRTIMEAMOUNT !== '') && (USERBUYAIRTIMEPHONENUMBER !== null && USERBUYAIRTIMEPHONENUMBER !==  '') && (USERBUYAIRTIMENETWORK !== null && USERBUYAIRTIMENETWORK !== '') && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (AIRTIME)', USERBUYAIRTIME, '\n', USERBUYAIRTIMEAMOUNT, '\n', USERBUYAIRTIMEPHONENUMBER, '\n', USERBUYAIRTIMENETWORK, '\n', formattedNumber);
                                     try {
                                         const responseMsg = await controllers.buyAirtime({
@@ -262,7 +262,7 @@ async function connectionLogic() {
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (FUND ACCOUNT)
                              async function handleFunding() {
-                                if (USERFUNDACCOUNT === true && USERFUNDACCOUNTAMOUNT !== null || '' && formattedNumber !== '') {
+                                if (USERFUNDACCOUNT === true && (USERFUNDACCOUNTAMOUNT !== null && USERFUNDACCOUNTAMOUNT !==  '') && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (ACCOUNT FUNDING)', USERFUNDACCOUNT, '\n', USERFUNDACCOUNTAMOUNT, formattedNumber);
                                     try {
                                         const responseMsg = await controllers.fundAccount({
@@ -294,7 +294,7 @@ async function connectionLogic() {
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (USER REFERRED BY SOMEONE)
                             async function handleReferral() {
-                                if (USERREFERRED === true && USERREFERREE !== null || '' && formattedNumber !== '') {
+                                if (USERREFERRED === true && (USERREFERREE !== null && USERREFERREE !== '') && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (REFERRAL)', USERREFERRED, '\n', USERREFERREE, formattedNumber);
                                     try {
                                         const responseMsg = await controllers.handleReferral({

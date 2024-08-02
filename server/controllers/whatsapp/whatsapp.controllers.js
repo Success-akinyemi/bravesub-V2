@@ -1,9 +1,11 @@
 import UserModel from "../../model/User.js"
 
 export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, userId }) => {
+    const user = await UserModel.findOne({ mobile: userId })
+    console.log('BUY DATA')
     try{
 
-        return ``
+        return `data coming soon`
     } catch (error){
         console.log('WHATSAPP ERROR (BUY DATA)', error)
         return `Failed Unable to buy data`
@@ -11,9 +13,11 @@ export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, 
 }
 
 export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, networkCode, userId }) => {
+    const user = await UserModel.findOne({ mobile: userId })
+    console.log('BUY AIRTIME')
     try {
         
-        return ``
+        return `Airtime coming soon`
     } catch (error) {
         console.log('WHATSAPP ERROR (BUY AIRTIME)', error)
         return ``
