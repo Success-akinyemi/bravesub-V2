@@ -210,12 +210,14 @@ async function connectionLogic() {
                                             userId: formattedNumber
                                         })
                                         console.log('DATA RESPONSE MESSAGE>>>:', responseMsg);
-                                        await sock.sendMessage(
-                                            numberWa,
-                                            {
-                                                text: responseMsg,
-                                            }
-                                        );
+                                        if(responseMsg){
+                                            await sock.sendMessage(
+                                                numberWa,
+                                                {
+                                                    text: responseMsg,
+                                                }
+                                            );
+                                        }
                                         USERBUYDATA = false;
                                         USERBUYDATADATAPLAN = null;
                                         USERBUYDATAPHONENUMBER = null;
@@ -225,7 +227,7 @@ async function connectionLogic() {
                                         await sock.sendMessage(
                                             numberWa,
                                             {
-                                                text: errorMsg,
+                                                text: `Uanble to process your request ${senderName}. Please try again`,
                                             }
                                         );   
                                         USERBUYDATA = false;
@@ -250,12 +252,14 @@ async function connectionLogic() {
                                             userId: formattedNumber
                                         })
                                         console.log('AIRTIME RESPONSE MESSAGE>>>:', responseMsg);
-                                        await sock.sendMessage(
-                                            numberWa,
-                                            {
-                                                text: responseMsg,
-                                            }
-                                        );
+                                        if(responseMsg){
+                                            await sock.sendMessage(
+                                                numberWa,
+                                                {
+                                                    text: responseMsg,
+                                                }
+                                            );
+                                        }
                                         USERBUYAIRTIME = false;
                                         USERBUYAIRTIMEAMOUNT = null;
                                         USERBUYAIRTIMEPHONENUMBER = null
@@ -265,7 +269,7 @@ async function connectionLogic() {
                                         await sock.sendMessage(
                                             numberWa,
                                             {
-                                                text: errorMsg,
+                                                text: `Uanble to process your request ${senderName}. Please try again`,
                                             }
                                         );
                                         USERBUYAIRTIME = false;
@@ -287,19 +291,21 @@ async function connectionLogic() {
                                             amount: USERFUNDACCOUNTAMOUNT,
                                             userId: formattedNumber
                                         });
-                                        await sock.sendMessage(
-                                            numberWa,
-                                            {
-                                                text: responseMsg,
-                                            }
-                                        );
+                                        if(responseMsg){
+                                            await sock.sendMessage(
+                                                numberWa,
+                                                {
+                                                    text: responseMsg,
+                                                }
+                                            );
+                                        }
                                         USERFUNDACCOUNT = false
                                         USERFUNDACCOUNTAMOUNT = null
                                     } catch (errorMsg) {
                                         await sock.sendMessage(
                                             numberWa,
                                             {
-                                                text: errorMsg,
+                                                text: `Uanble to process your request ${senderName}. Please try again`,
                                             }
                                         );
                                         USERFUNDACCOUNT = false
@@ -320,12 +326,14 @@ async function connectionLogic() {
                                             userId: formattedNumber
                                         });
                                         console.log('REFERRAL RESPONSE MESSAGE>>>:', responseMsg);
-                                        await sock.sendMessage(
-                                            numberWa,
-                                            {
-                                                text: responseMsg,
-                                            }
-                                        );
+                                        if(responseMsg){
+                                            await sock.sendMessage(
+                                                numberWa,
+                                                {
+                                                    text: responseMsg,
+                                                }
+                                            );
+                                        }
                                         USERREFERRED = false
                                         USERREFERREE = null
                                     } catch (errorMsg) {
@@ -333,7 +341,7 @@ async function connectionLogic() {
                                         await sock.sendMessage(
                                             numberWa,
                                             {
-                                                text: errorMsg,
+                                                text: `Uanble to process your request ${senderName}. Please try again`,
                                             }
                                         );
                                         USERREFERRED = false
