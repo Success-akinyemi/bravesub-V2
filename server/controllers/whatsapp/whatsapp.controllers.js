@@ -48,12 +48,15 @@ export const handleReferral = async({userConfirm, referreeId, userId}) => {
     const user = await UserModel.findOne({ mobile: userId })
     console.log('HANDLE REFERRAL')
     try {
-        if(referreeId === user._id){
+        if(referreeId.toString() === user._id.toString()) {
             return `Unfortunatley ${user.username}, you cannot refer yourself please share the link with others.`
         }
         const findReferrer = await UserModel.findById({ _id: referreeId })
         if(!findReferrer){
             return `Sorry ${user.username}, no user found with the id provided please re-confirm id`
+        }
+        if (findReferrer.referrals.includes(user._id)) {
+            return 'This user has already been referred.';
         }
         findReferrer.referrals.push(user._id);
         await findReferrer.save();

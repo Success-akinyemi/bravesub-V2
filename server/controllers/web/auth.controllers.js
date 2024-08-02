@@ -59,14 +59,16 @@ export async function register(req, res) {
         await user.save();
 
         if (referredBy) {
-            const referrer = await UserModel.findById(referredBy);
-            if (referrer) {
-                referrer.referrals.push(user._id);
-                await referrer.save();
-                user.referredBy = referrer._id;
-                await user.save();
-            } else {
-                console.log('REFERRER NOT FOUND');
+            if (!referrer.referrals.includes(user._id)) {
+                const referrer = await UserModel.findById(referredBy);
+                if (referrer) {
+                    referrer.referrals.push(user._id);
+                    await referrer.save();
+                    user.referredBy = referrer._id;
+                    await user.save();
+                } else {
+                    console.log('REFERRER NOT FOUND');
+                }
             }
         }
 
