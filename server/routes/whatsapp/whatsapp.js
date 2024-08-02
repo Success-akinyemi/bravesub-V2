@@ -329,7 +329,7 @@ async function connectionLogic() {
                                         USERREFERRED = false
                                         USERREFERREE = null
                                     } catch (errorMsg) {
-                                        console.log('REFERRAL RESPONSE MESSAGE>>>:', errorMsg);
+                                        console.log('REFERRAL ERROR MESSAGE>>>:', errorMsg);
                                         await sock.sendMessage(
                                             numberWa,
                                             {

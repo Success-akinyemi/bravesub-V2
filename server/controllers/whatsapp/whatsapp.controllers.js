@@ -1,19 +1,22 @@
 import UserModel from "../../model/User.js"
 
 export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, userId }) => {
+    let responseMsg
     try{
         const user = await UserModel.findOne({ mobile: userId })
         console.log('BUY DATA')
         const mobileRegex = /^(090|080|070)\d{8}$/;
         if (!mobileRegex.test(phoneNumber)) {
-            return `Unfortunately ${user.username}, ${phoneNumber} is not a valid phone number`;
+            responseMsg = `Unfortunately ${user.username}, ${phoneNumber} is not a valid phone number`;
+            return responseMsg
         }
 
-        return `Alright ${user.username} data coming soon`
+        responseMsg = `Alright ${user.username} data coming soon`
     } catch (error){
         console.log('WHATSAPP ERROR (BUY DATA)', error)
-        return `Failed Unable to buy data`
+        responseMsg =  `Failed Unable to buy data`
     }
+    return responseMsg
 }
 
 export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, networkCode, userId }) => {
