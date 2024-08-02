@@ -1,9 +1,13 @@
 import UserModel from "../../model/User.js"
 
 export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, userId }) => {
-    const user = await UserModel.findOne({ mobile: userId })
-    console.log('BUY DATA')
     try{
+        const user = await UserModel.findOne({ mobile: userId })
+        console.log('BUY DATA')
+        const mobileRegex = /^(090|080|070)\d{8}$/;
+        if (!mobileRegex.test(mobphoneNumberile)) {
+            return `Unfortunately ${user.username}, ${phoneNumber} is not a valid phone number`;
+        }
 
         return `Alright ${user.username} data coming soon`
     } catch (error){
@@ -13,9 +17,13 @@ export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, 
 }
 
 export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, networkCode, userId }) => {
-    const user = await UserModel.findOne({ mobile: userId })
-    console.log('BUY AIRTIME')
     try {
+        const user = await UserModel.findOne({ mobile: userId })
+        console.log('BUY AIRTIME')
+        const mobileRegex = /^(090|080|070)\d{8}$/;
+        if (!mobileRegex.test(mobphoneNumberile)) {
+            return `Unfortunately ${user.username}, ${phoneNumber} is not a valid phone number`;
+        }
         
         return `Alright ${user.username} Airtime coming soon`
     } catch (error) {
