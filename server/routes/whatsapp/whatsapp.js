@@ -209,6 +209,7 @@ async function connectionLogic() {
                                             phoneNumber: USERBUYDATAPHONENUMBER,
                                             userId: formattedNumber
                                         })
+                                        console.log('DATA RESPONSE MESSAGE>>>:', responseMsg);
                                         await sock.sendMessage(
                                             numberWa,
                                             {
@@ -220,6 +221,7 @@ async function connectionLogic() {
                                         USERBUYDATAPHONENUMBER = null;
                                         USERBUYDATANETWORK = null;
                                     } catch (errorMsg) {
+                                        console.log('DATA ERROR MESSAGE>>>:', errorMsg);
                                         await sock.sendMessage(
                                             numberWa,
                                             {
@@ -243,6 +245,7 @@ async function connectionLogic() {
                                             networkCode: USERBUYAIRTIMENETWORK,
                                             userId: formattedNumber
                                         })
+                                        console.log('AIRTIME RESPONSE MESSAGE>>>:', responseMsg);
                                         await sock.sendMessage(
                                             numberWa,
                                             {
@@ -254,6 +257,7 @@ async function connectionLogic() {
                                         USERBUYAIRTIMEPHONENUMBER = null
                                         USERBUYAIRTIMENETWORK = null
                                     } catch (errorMsg) {
+                                        console.log('AIRTIME ERROR MESSAGE>>>:', errorMsg);
                                         await sock.sendMessage(
                                             numberWa,
                                             {
@@ -307,6 +311,7 @@ async function connectionLogic() {
                                             referreeId: USERREFERREE,
                                             userId: formattedNumber
                                         });
+                                        console.log('REFERRAL RESPONSE MESSAGE>>>:', responseMsg);
                                         await sock.sendMessage(
                                             numberWa,
                                             {
@@ -316,6 +321,7 @@ async function connectionLogic() {
                                         USERREFERRED = false
                                         USERREFERREE = null
                                     } catch (errorMsg) {
+                                        console.log('REFERRAL RESPONSE MESSAGE>>>:', errorMsg);
                                         await sock.sendMessage(
                                             numberWa,
                                             {
