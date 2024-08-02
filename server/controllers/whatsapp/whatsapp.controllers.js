@@ -43,7 +43,7 @@ export const handleReferral = async({userConfirm, referreeId, userId}) => {
             return `Sorry ${user.username}, no user found with the id provided please re-confirm id`
         }
         findReferrer.referrals.push(user._id);
-        await referrer.save();
+        await findReferrer.save();
         user.referredBy = findReferrer._id;
         await user.save();
         

@@ -123,8 +123,8 @@ async function connectionLogic() {
                             maxOutputTokens: 1000,
                         },
                     });
-    
-                    const result = await chat.sendMessage(`
+
+                    const firstPrompt = `
                         you are a sales rep for a company name Bravesub. a company that sells mobile airtime, internet data, buy cable tv subscription, and pay electricity bill. 
                         and and your name is BraveLite you are to maintain a quality chat with our users and their chat histroy you have with them. this is the new message: ${captureMessage}. 
                         the customer username is ${senderName} and a object of the database infomation in object form is ${getUser}. 
@@ -134,18 +134,23 @@ async function connectionLogic() {
                         and important also analyze the the user chat to know what the user whats the service be rendered.
                         if you analyze and the user want to buy data in your response set:
                         an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
-                    
+                        then tell them to please wait a moment while you process their request
+
                         for airtime our networks are: MTN code: 1, AIRTEL code: 2, GLO code: 3, 9Mobile code: 4, send only the network to the user you will use the code to assign which network the user picks.
                         ask for the amount of airtime the user wants to buy minimium of 50 naira and maximium of 50,000 naira. ask for the phone Number also the user wants to buy for
                         if you analyze and the user want to buy airtime in your response set:
                         an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
-                        
+                        then tell them to please wait a moment while you process their request
+
                         if you analyze and the user want to fund their account in your response set:
                         an object in this form { USERFUNDACCOUNT: 'set to true after you have confirm the user want to fund their account', USERFUNDACCOUNTAMOUNT: 'the amount the user wants to fund their account with'  }
+                        then tell them to please wait a moment while you process their request
                     
-                        ifyou analyze and the user talks about been reffered by someone their message will contain the userId of the person that referred the in your response set:
-                        an object in this form { USERREFERRED: true, USERREFERREE: 'the user id of the person that referred them contain in the message'  }
-                    `);
+                        if you analyze and the user message talks about been reffered by someone their message will contain the userId of the person that referred the in your response set:
+                        an object in this form { USERREFERRED: true, USERREFERREE: 'the userId of the person that referred them contain in the message'  }
+                    `
+    
+                    const result = await chat.sendMessage(findUserChat.history.length > 0 ? captureMessage : firstPrompt );
                     const response = await result.response;
                     const text = response.text();
                     console.log('MESSAGE FROM GEMINI:', text);
@@ -189,7 +194,7 @@ async function connectionLogic() {
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
                             async function handleData(){
-                                if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null && USERBUYDATANETWORK !== null && USERBUYDATAPHONENUMBER !== null && formattedNumber !== '') {
+                                if (USERBUYDATA === true && USERBUYDATADATAPLAN !== null || '' && USERBUYDATANETWORK !== null || '' && USERBUYDATAPHONENUMBER !== null || '' && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (DATA)', USERBUYDATA, '\n', USERBUYDATADATAPLAN, '\n', USERBUYDATANETWORK, '\n', USERBUYDATAPHONENUMBER, '\n', formattedNumber);
                                     try {
                                         const responseMsg = await controllers.buyData({
@@ -223,7 +228,7 @@ async function connectionLogic() {
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (DATA)
                             async function handleAirtime(){
-                                if (USERBUYAIRTIME === true && USERBUYAIRTIMEAMOUNT !== null && USERBUYAIRTIMEPHONENUMBER !== null && USERBUYAIRTIMENETWORK !== null && formattedNumber !== '') {
+                                if (USERBUYAIRTIME === true && USERBUYAIRTIMEAMOUNT !== null || '' && USERBUYAIRTIMEPHONENUMBER !== null || '' && USERBUYAIRTIMENETWORK !== null || '' && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (AIRTIME)', USERBUYAIRTIME, '\n', USERBUYAIRTIMEAMOUNT, '\n', USERBUYAIRTIMEPHONENUMBER, '\n', USERBUYAIRTIMENETWORK, '\n', formattedNumber);
                                     try {
                                         const responseMsg = await controllers.buyAirtime({
@@ -257,7 +262,7 @@ async function connectionLogic() {
 
                             // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (FUND ACCOUNT)
                              async function handleFunding() {
-                                if (USERFUNDACCOUNT === true && USERFUNDACCOUNTAMOUNT !== null && formattedNumber !== '') {
+                                if (USERFUNDACCOUNT === true && USERFUNDACCOUNTAMOUNT !== null || '' && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (ACCOUNT FUNDING)', USERFUNDACCOUNT, '\n', USERFUNDACCOUNTAMOUNT, formattedNumber);
                                     try {
                                         const responseMsg = await controllers.fundAccount({
@@ -280,14 +285,16 @@ async function connectionLogic() {
                                                 text: errorMsg,
                                             }
                                         );
+                                        USERFUNDACCOUNT = false
+                                        USERFUNDACCOUNTAMOUNT = null
                                     }
                                 }
                             }                            
                             handleFunding();
 
-                            //// CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (USER REFERRED BY SOMEONE)
+                            // CALL FUNCTIONS BASED ON LET VARIABLES COMPLETIONS (USER REFERRED BY SOMEONE)
                             async function handleReferral() {
-                                if (USERREFERRED === true && USERREFERREE !== null && formattedNumber !== '') {
+                                if (USERREFERRED === true && USERREFERREE !== null || '' && formattedNumber !== '') {
                                     console.log('RESPONSE DATA (REFERRAL)', USERREFERRED, '\n', USERREFERREE, formattedNumber);
                                     try {
                                         const responseMsg = await controllers.handleReferral({
@@ -310,6 +317,8 @@ async function connectionLogic() {
                                                 text: errorMsg,
                                             }
                                         );
+                                        USERREFERRED = false
+                                        USERREFERREE = null
                                     }
                                 }
                             }                            
