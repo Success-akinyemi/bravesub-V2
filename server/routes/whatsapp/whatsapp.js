@@ -385,16 +385,19 @@ async function connectionLogic() {
             }
 
             //KEEP ALIVE MESSAGE
-            const sendMessage = async () => {
-                await sock.sendMessage(
-                    process.env.WHATSAPPNUMBER, 
-                    {
-                    text: `Hello success keeping alive message`,
-                });
-            }
-            const job = schedule.scheduleJob('*/3 * * * *', () => {
-                sendMessage();
-            });
+            /**
+             const sendMessage = async () => {
+                 await sock.sendMessage(
+                     process.env.WHATSAPPNUMBER, 
+                     {
+                     text: `Hello success keeping alive message`,
+                 });
+             }
+             * 
+             */
+            // const job = schedule.scheduleJob('*/3 * * * *', () => {
+            //    sendMessage();
+            // });
             
         } catch (error) {
             console.log('UNABLE TO REPLY MESSAGE', error);

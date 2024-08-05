@@ -9,6 +9,9 @@ import airtimeRoute from './routes/web/airtime.routes.js'
 import dataRoute from './routes/web/data.routes.js'
 import userRoute from './routes/web/user.routes.js'
 import adminRoute from './routes/web/adminAuth.routes.js'
+import schedule from 'node-schedule'
+import axios from "axios";
+import UserModel from "./model/User.js";
 
 
 
@@ -59,6 +62,27 @@ app.use('/api/web/admin', adminRoute)
 import './routes/whatsapp/whatsapp.js'
 
 //INSTAGRAM
+
+
+//CORN KEEP ALIVE
+
+app.get('/keep-alive', async (req, res) => {
+    const user = await UserModel.find()
+  
+    console.log('Total number of bookings.', user.length);
+    res.status(201).json(`Keep alive Request fun: ${user.length}`)
+  })
+
+const sendMessage = async () => {
+    const res = await axios.post(`${process.env.NEBOUR_URL}/keep-alive`)
+
+    console.log('ALIVE RESPONSE', res.data)
+
+}
+const job = schedule.scheduleJob('*/3 * * * *', () => {
+    sendMessage();
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server runing on port http://localhost:${PORT}`)
