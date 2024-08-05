@@ -79,22 +79,22 @@ async function connectionLogic() {
                     }
     
                     const formattedNumber = getFormattedPhoneNumber(numberWa);
-                    const compareMessage = captureMessage.toLocaleLowerCase();
+                    //const compareMessage = captureMessage.toLocaleLowerCase();
     
                     const checkNumber = await UserModel.findOne({ mobile: formattedNumber });
                     if (!checkNumber) {
-                        await UserModel.create({
+                        const newUser = await UserModel.create({
                             mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`
                         });
                         
                         //create a whatsapp referal link for user
-                        const whatsRefLink = `https://wa.me/2349033626014?text=Hello%20BraveLite%20I%20was%20referred%20by%20userId%3A${checkNumber._id}`
-                        checkNumber.whatsappReferralLink = whatsRefLink;
-                        await checkNumber.save();
+                        const whatsRefLink = `https://wa.me/2349033626014?text=Hello%20BraveLite%20I%20was%20referred%20by%20userId%3A${newUser._id}`
+                        newUser.whatsappReferralLink = whatsRefLink;
+                        await newUser.save();
 
-                        const referralLink = `${process.env.CLIENT_URL}/register?ref=${checkNumber._id}`;
-                        checkNumber.referralLink = referralLink;
-                        await checkNumber.save();
+                        const referralLink = `${process.env.CLIENT_URL}/register?ref=${newUser._id}`;
+                        newUser.referralLink = referralLink;
+                        await newUser.save();
                     }
                     if(!checkNumber.referralLink){
                         const referralLink = `${process.env.CLIENT_URL}/register?ref=${checkNumber._id}`;
