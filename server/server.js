@@ -74,7 +74,7 @@ app.get('/keep-alive', async (req, res) => {
   })
 
 const sendMessage = async () => {
-    const res = await axios.post(`${process.env.NEBOUR_URL}/keep-alive`)
+    const res = await axios.get(`${process.env.NEBOUR_URL}/keep-alive`)
 
     console.log('ALIVE RESPONSE', res.data)
 
