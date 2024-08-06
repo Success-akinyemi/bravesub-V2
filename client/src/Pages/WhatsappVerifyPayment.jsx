@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { verifyPaystackPayment } from "../Helpers/api";
 import { useEffect, useState  } from "react";
 import LogoImg from '../assets/logo.png'
+import toast from "react-hot-toast";
 
 function WhatsappVerifyPayment() {
     const location = useLocation();
