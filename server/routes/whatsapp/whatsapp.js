@@ -80,10 +80,12 @@ async function connectionLogic() {
     
                     const formattedNumber = getFormattedPhoneNumber(numberWa);
                     //const compareMessage = captureMessage.toLocaleLowerCase();
-    
-                    const checkNumber = await UserModel.findOne({ mobile: formattedNumber });
+                    
+                    let checkNumber
+                    const checkMobile = await UserModel.findOne({ mobile: formattedNumber });
                     const checkNumberWhatsappNumber = await UserModel.findOne({ whatsappNumber: formattedNumber });
-                    if (!checkNumber || !checkNumberWhatsappNumber) {
+                    checkNumber = checkMobile ? checkMobile : checkNumberWhatsappNumber
+                    if (!checkNumber) {
                         const newUser = await UserModel.create({
                             mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`, verified: true
                         });
@@ -97,6 +99,8 @@ async function connectionLogic() {
                         newUser.referralLink = referralLink;
                         await newUser.save();
                     }
+                    /**
+                     * 
                     if(!checkNumber.referralLink){
                         const referralLink = `${process.env.CLIENT_URL}/register?ref=${checkNumber._id}`;
                         checkNumber.referralLink = referralLink;
@@ -107,6 +111,7 @@ async function connectionLogic() {
                         checkNumber.whatsappReferralLink = whatsRefLink;
                         await checkNumber.save();
                     }
+                     */
     
                     const getUser = await UserModel.findOne({ mobile: formattedNumber });
                     const findChats = await WhatsappChatModel.findOne({ userId: formattedNumber });
