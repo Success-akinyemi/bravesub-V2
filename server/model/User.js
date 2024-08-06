@@ -21,6 +21,7 @@ export const UserSchema = new mongoose.Schema({
     firstName: { type: String },
     lastName: { type: String },
     mobile: { type: String},
+    whatsappNumber: { type: String},
     profile: { 
         type: String,
         default: 'https://firebasestorage.googleapis.com/v0/b/success-clone.appspot.com/o/user_1177568.png?alt=media&token=3c4010b0-526b-4f76-ae30-d0e74d76716e'

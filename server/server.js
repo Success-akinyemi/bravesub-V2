@@ -19,8 +19,16 @@ import UserModel from "./model/User.js";
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    process.env.NEBOUR_URL,
+];
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    const origin = req.headers.origin;
+
+    if (allowedOrigins.includes(origin)) {
+      res.header('Access-Control-Allow-Origin', origin);
+    }
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -28,7 +36,13 @@ app.use((req, res, next) => {
 });
 
 const corsOptions = {
-    origin: `${process.env.CLIENT_URL}`,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },    
     credentials: true,
 };
 

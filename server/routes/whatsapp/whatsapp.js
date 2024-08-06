@@ -82,9 +82,10 @@ async function connectionLogic() {
                     //const compareMessage = captureMessage.toLocaleLowerCase();
     
                     const checkNumber = await UserModel.findOne({ mobile: formattedNumber });
-                    if (!checkNumber) {
+                    const checkNumberWhatsappNumber = await UserModel.findOne({ whatsappNumber: formattedNumber });
+                    if (!checkNumber || !checkNumberWhatsappNumber) {
                         const newUser = await UserModel.create({
-                            mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`
+                            mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`, verified: true
                         });
                         
                         //create a whatsapp referal link for user
@@ -135,26 +136,33 @@ async function connectionLogic() {
                         for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the discountAllowed 
                         and important also analyze the the user chat to know what the user whats the service be rendered.
                         if you analyze and the user want to buy data in your response set:
-                        an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
+                        an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for always ask for it' } only put the array in your response when you have analyze and collected the infomation for the array 
                         then tell them to please wait a moment while you process their request
 
                         for airtime our networks are: MTN code: 1, AIRTEL code: 2, GLO code: 3, 9Mobile code: 4, send only the network to the user you will use the code to assign which network the user picks.
                         ask for the amount of airtime the user wants to buy minimium of 50 naira and maximium of 50,000 naira. ask for the phone Number also the user wants to buy for
                         if you analyze and the user want to buy airtime in your response set:
-                        an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for' } only put the array in your response when you have analyze and collected the infomation for the array 
+                        an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for always ask for it' } only put the array in your response when you have analyze and collected the infomation for the array 
                         then tell them to please wait a moment while you process their request
 
                         if you analyze and the user want to fund their account in your response set:
-                        an object in this form { USERFUNDACCOUNT: 'set to true after you have confirm the user want to fund their account', USERFUNDACCOUNTAMOUNT: 'the amount the user wants to fund their account with'  }
+                        an object in this form { USERFUNDACCOUNT: 'set to true after you have confirm the user want to fund their account', USERFUNDACCOUNTAMOUNT: 'the amount the user wants to fund their account with ask them for it'  }
                         then tell them to please wait a moment while you process their request
                     
                         if you analyze and the user message talks about been reffered by someone their message will contain the userId of the person that referred the in your response set:
                         an object in this form { USERREFERRED: true, USERREFERREE: 'the userId of the person that referred them contain in the message'  }
+
+                        some few this to know should incase a customers ask;
+                        - an account has been created for them the very moment the start to chat with you.
+                        - the comapany website link is: ${process.env.CLIENT_URL}
+                        - the login link is: ${process.env.CLIENT_URL}/login
+                        - the signup link is: ${process.env.CLIENT_URL}/register
+                        - they can do all the service they need just by chatting with you
                     `
 
                     const secondPrompt = `
-                        based on your very first prompt given to you to work with it the current customer details in object form is: ${getUser} and customer username is ${senderName} continue workig with the first prompt as guide also with the current updated data. the new customer message is: ${captureMessage}
-                        always remember to keep track of the conversation and analyze the chat to fill the corresponding json object appropriately
+                        based on your very first prompt given to you in the chat histroy to work with it, the current customer details in object form is: ${getUser} and customer username is ${senderName} continue workig with the first prompt as guide also with the current updated data. the new customer message is: ${captureMessage}
+                        always remember to keep track of the conversation and analyze the chat to fill the corresponding json object appropriately as stated in the first prompt
                     `
     
                     const result = await chat.sendMessage(findUserChat.history.length > 0 ? secondPrompt : firstPrompt );
