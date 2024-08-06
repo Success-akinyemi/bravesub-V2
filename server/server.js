@@ -22,6 +22,8 @@ app.use(cookieParser())
 const allowedOrigins = [
     process.env.CLIENT_URL,
     process.env.NEBOUR_URL,
+    process.env.CLIENT_URL2,
+    process.env.CLIENT_URL3
 ];
 app.use((req, res, next) => {
     const origin = req.headers.origin;
