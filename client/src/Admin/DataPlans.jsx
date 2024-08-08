@@ -113,7 +113,7 @@ function DataPlans({ setSelectedCard, setformData, formData}) {
                                 </span>
                                 <span className='flex items-center text-gray-600 small-phone:text-[13px]'>
                                     <FaNairaSign className='font-extralight' />
-                                    {`${item?.discountAllowed} cashback`}
+                                    {`${item?.cashBack} cashback`}
                                 </span>
                             </div>
                         )) 

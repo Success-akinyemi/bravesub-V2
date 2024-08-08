@@ -15,7 +15,7 @@ const mailGenerator = new Mailgen({
 
 export async function register(req, res) {
     console.log('REGISTRATION BODY>>>',req.body);
-    const { email, username, firstName, lastName, password, mobile, ConfirmPassword, referredBy } = req.body;
+    const { email, username, firstName, lastName, password, mobile, ConfirmPassword, referredBy, whatsappNumber } = req.body;
 
 
     if (!email || !password || !firstName ||!lastName || !username || !mobile || !ConfirmPassword) {
@@ -37,7 +37,14 @@ export async function register(req, res) {
 
     const mobileRegex = /^(090|080|070)\d{8}$/;
     if (!mobileRegex.test(mobile)) {
-        return res.status(400).json({ success: false, data: 'Invalid phone number' });
+        return res.status(400).json({ success: false, data: 'Invalid phone number format' });
+    }
+
+    if(whatsappNumber){
+        const mobileRegex = /^(090|080|070)\d{8}$/;
+        if (!mobileRegex.test(whatsappNumber)) {
+            return res.status(400).json({ success: false, data: 'Invalid whatsapp number format' });
+        }
     }
 
     try {
@@ -51,7 +58,7 @@ export async function register(req, res) {
             return res.status(400).json({ success: false, data: 'Phone Number already exists. Please use another Phone Number' });
         }
 
-        const user = await UserModel.create({ firstName, lastName, username, email, password, mobile, createdSource: 'web' });
+        const user = await UserModel.create({ firstName, lastName, username, email, password, mobile, createdSource: 'web', whatsappNumber });
         console.log('USER CREATED');
 
         const referralLink = `${process.env.CLIENT_URL}/register?ref=${user._id}`;

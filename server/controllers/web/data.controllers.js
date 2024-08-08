@@ -23,7 +23,7 @@ export async function buyData(req, res){
 }
 
 export async function createDataPlans(req, res) {
-    const { networkCode, networkName, dataCode, planName, planType, price, discountAllowed, validity, costPrice } = req.body;
+    const { networkCode, networkName, dataCode, planName, planType, price, cashBack, validity, costPrice } = req.body;
     try {
         if (!networkCode || !networkName || !dataCode || !planName || !planType || !price || !validity || !costPrice) {
             return res.status(400).json({ success: false, data: 'All fields are required' });
@@ -40,7 +40,7 @@ export async function createDataPlans(req, res) {
         }
 
         const newDataPlan = await DataPlansModel.create({
-            networkCode, networkName, dataCode, planName, planType, price, discountAllowed, validity, costPrice
+            networkCode, networkName, dataCode, planName, planType, price, cashBack, validity, costPrice
         });
         console.log(newDataPlan);
         return res.status(201).json({ success: true, data: `New data plan created for ${networkName}` });
@@ -52,7 +52,7 @@ export async function createDataPlans(req, res) {
 
 export async function updateDataPlans(req, res) {
 
-    const { _id, networkCode, networkName, dataCode, planName, planType, price, discountAllowed, costPrice, validity } = req.body;
+    const { _id, networkCode, networkName, dataCode, planName, planType, price, cashBack, costPrice, validity } = req.body;
     try {
         const findDataPlan = await DataPlansModel.findById({ _id: _id });
         if(!findDataPlan){
@@ -70,7 +70,7 @@ export async function updateDataPlans(req, res) {
                     planType,
                     price,
                     costPrice,
-                    discountAllowed,
+                    cashBack,
                     validity
                 }
             },

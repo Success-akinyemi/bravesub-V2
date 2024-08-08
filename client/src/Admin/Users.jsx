@@ -12,7 +12,17 @@ function Users({setSelectedCard, setFormData}) {
     //const allUsersData = users
     const allUsersData = allUsers?.data
     const sortedUsers = allUsersData?.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
-    const filteredData = sortedUsers?.filter(item => item?.email?.includes(searchQuery))
+    
+    const filteredData = sortedUsers?.filter(item => {
+        const query = searchQuery.toLowerCase()
+        return (
+            item?.email?.toLowerCase().includes(query) ||
+            item?.mobile?.toLowerCase().includes(query) ||
+            item?.username?.toLowerCase().includes(query) ||
+            item?.whatsappNumber?.toLowerCase().includes(query)
+        )
+        }
+    )
 
     const handleUser = (item) => {
         setFormData(item)
@@ -55,7 +65,6 @@ function Users({setSelectedCard, setFormData}) {
                         <div key={item._id} onClick={() => handleUser(item)} className="mb-3 border-b-2 pb-2 flex items-center">
                             <div className="flex items-center gap-1 mr-3">
                                 <p>{item?.firstName}</p>
-                                <p>{item?.lastName}</p>
                             </div>
                             <p className="phone:text-[15px] text-gray-600">{item?.email}</p>
                             <div className="ml-auto">

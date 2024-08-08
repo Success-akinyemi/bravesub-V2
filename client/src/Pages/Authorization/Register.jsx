@@ -118,7 +118,11 @@ function Register({formData, setformData}) {
             </div>
             <div className="inputGroup">
                 <label className='font-semibold phone:text-[15px]' htmlFor="Phone Number">Phone Number</label>
-                <input className='text-[18px] phone:text-[17px]' onChange={handleInputs} type="text" id="mobile" />
+                <input className='text-[18px] phone:text-[17px]' placeholder='E.g 09012345678' onChange={handleInputs} type="text" id="mobile" />
+            </div>
+            <div className="inputGroup">
+                <label className='font-semibold phone:text-[15px]' htmlFor="Whatsapp Number">Whatsapp Number</label>
+                <input className='text-[18px] phone:text-[17px]' placeholder='E.g 09012345678' onChange={handleInputs} type="text" id="whatsappNumber" />
             </div>
             <div className="inputGroup">
                 <label className='font-semibold phone:text-[15px]' htmlFor="Password">Password</label>

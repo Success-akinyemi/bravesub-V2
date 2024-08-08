@@ -79,8 +79,8 @@ function EditDataPlan({formData, setFormData}) {
             </div>
 
             <div className="inputGroup mt-5 gap-[1px]">
-                <p>Data Discount Allowed:</p>
-                <input type="number" id="discountAllowed" onChange={handleChange} defaultValue={formData?.discountAllowed} placeholder="Enter discount Allowed" />
+                <p>Data Discount Allowed (Cash Back):</p>
+                <input type="number" id="cashBack" onChange={handleChange} defaultValue={formData?.cashBack} placeholder="Enter discount Allowed" />
             </div>
 
             <div className="inputGroup mt-5 gap-[1px]">

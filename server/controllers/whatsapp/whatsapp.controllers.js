@@ -1,6 +1,6 @@
 import UserModel from "../../model/User.js"
 
-export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, userId }) => {
+export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, userId, useCashBack }) => {
     let responseMsg
     try{
         const user = await UserModel.findOne({ mobile: userId })
@@ -19,7 +19,7 @@ export const buyData = async({ userConfirm, planCode, networkCode, phoneNumber, 
     return responseMsg
 }
 
-export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, networkCode, userId }) => {
+export const buyAirtime = async({ userConfirm, airtimeAmount, phoneNumber, networkCode, useCashBack, userId }) => {
     try {
         const user = await UserModel.findOne({ mobile: userId })
         console.log('BUY AIRTIME')

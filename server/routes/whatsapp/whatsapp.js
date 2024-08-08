@@ -9,11 +9,13 @@ import * as controllers from '../../controllers/whatsapp/whatsapp.controllers.js
 import schedule from 'node-schedule'
 
 const braveLiteAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-// const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
+const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
 // const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro-vision' });
-const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+//const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 // Declare variables to monitor the last chat of the bot and get the keywords, intercept message flow, and carry out transactions
+let USECASHBACK = false;
+
 // Data
 let USERBUYDATA = false;
 let USERBUYDATADATAPLAN = null;
@@ -87,7 +89,7 @@ async function connectionLogic() {
                     checkNumber = checkMobile ? checkMobile : checkNumberWhatsappNumber
                     if (!checkNumber) {
                         const newUser = await UserModel.create({
-                            mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`, verified: true
+                            mobile: formattedNumber, username: senderName, password: userPass, createdSource: 'whatsapp', email: `${formattedNumber}@gmail.com`, verified: true, whatsappNumber: formattedNumber
                         });
                         
                         //create a whatsapp referal link for user
@@ -134,20 +136,21 @@ async function connectionLogic() {
 
                     const firstPrompt = `
                         you are a sales rep for a company name Bravesub. a company that sells mobile airtime, internet data, buy cable tv subscription, and pay electricity bill. 
-                        and and your name is BraveLite you are to maintain a quality chat with our users and their chat histroy you have with them. this is the new message: ${captureMessage}. 
+                        and and your name is BraveLite you are to maintain a quality chat with our users and their chat histroy you have with them. this is the new and current user message: ${captureMessage}. 
                         the customer username is ${senderName} and a object of the database infomation of the customer in object form is ${getUser}. 
-                        the information given to you is for you to use and process your reply must be good to keep the user going and continue using based on your conversation with the customer do not give out example of conversation as output it is a real life chat and you must continue to chat with user the information given to you is to make good decisions while chatting with the user.
+                        the information given to you is for you to use and process. your reply must be good to keep the user going and continue using based on your conversation with the customer do NOT give out example of conversation as output it is a real life chat and you must continue to chat with user the information given to you is to make good decisions while chatting with the user.
+                        DO NOT GIVE OUT CHAT EXAMPLES AS OUTPUT, ONLY REPLY TO THE USER MESSAGE SENT TO YOU ONLY.
                         
-                        for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the discountAllowed 
+                        for buying of data our networks are: MTN, AIRTEL, GLO, 9Mobile, and Smile. the array of all our availble data plans are: ${dataPlans} to render data plans to the user when needed format the response from the array to the user. show only data plans of the network the user chooses showing the planName planType and then the price for each data plan as well as with the cashBack the user will get added to their cashPoint. if a network is not in the array and a user asked for just tell them it is not available.
                         and important also analyze the the user chat to know what the user whats the service be rendered.
                         if you analyze and the user want to buy data in your response set:
-                        an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for always ask for it' } only put the array in your response when you have analyze and collected the infomation for the array 
+                        an object in this form { USERBUYDATA: 'set to true after you have confirm from the user they want to proceed with the data purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYDATADATAPLAN: 'the dataCode same with the data plan the user choose', USERBUYDATANETWORK: 'the networkCode same with the data plan the user choose', USERBUYDATAPHONENUMBER: 'the phone number the user want to buy for always ask for it', USECASHBACK: 'set to true if the user wants to use their cash point balance to pay for the service' } only put the array in your response when you have analyze and collected the infomation for the array 
                         then tell them to please wait a moment while you process their request
 
                         for airtime our networks are: MTN code: 1, AIRTEL code: 2, GLO code: 3, 9Mobile code: 4, send only the network to the user you will use the code to assign which network the user picks.
                         ask for the amount of airtime the user wants to buy minimium of 50 naira and maximium of 50,000 naira. ask for the phone Number also the user wants to buy for
                         if you analyze and the user want to buy airtime in your response set:
-                        an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for always ask for it' } only put the array in your response when you have analyze and collected the infomation for the array 
+                        an object in this form { USERBUYAIRTIME: 'set to true after you have confirm from the user they want to proceed with the airtime purchase and the user has enough acctBalance to pay for the price or enough cashPoint to pay. if not enough funds tell the user they have insuffcient with their current acctBalance funds and will they like to fund their account', USERBUYAIRTIMEAMOUNT: 'the amount of airtime the user wants to buy', USERBUYAIRTIMENETWORK: 'the code that correspond with the network the user chooses', USERBUYAIRTIMEPHONENUMBER: 'the phone number the user want to buy for always ask for it', USECASHBACK: 'set to true if the user wants to use their cash point balance to pay for the service' } only put the array in your response when you have analyze and collected the infomation for the array 
                         then tell them to please wait a moment while you process their request
 
                         if you analyze and the user want to fund their account in your response set:
@@ -157,6 +160,7 @@ async function connectionLogic() {
                         if you analyze and the user message talks about been reffered by someone their message will contain the userId of the person that referred the in your response set:
                         an object in this form { USERREFERRED: true, USERREFERREE: 'the userId of the person that referred them contain in the message'  }
 
+                        before finalyzing the json of any service the user want always ensure the user has enough balance in their account balance to pay for the services or if their cashPoint balance is enough to pay for the service ask them if they want to use their cashPoint balance
                         some few this to know should incase a customers ask;
                         - an account has been created for them the very moment the start to chat with you.
                         - the comapany website link is: ${process.env.CLIENT_URL}
@@ -197,12 +201,14 @@ async function connectionLogic() {
                             USERBUYDATADATAPLAN = jsonObject.USERBUYDATADATAPLAN;
                             USERBUYDATANETWORK = jsonObject.USERBUYDATANETWORK;
                             USERBUYDATAPHONENUMBER = jsonObject.USERBUYDATAPHONENUMBER;
-                            
+                            USECASHBACK = jsonObject.USECASHBACK
+
                             // Assign values to the declared variables of airtime
                             USERBUYAIRTIME = jsonObject.USERBUYAIRTIME
                             USERBUYAIRTIMEAMOUNT = jsonObject.USERBUYAIRTIMEAMOUNT
                             USERBUYAIRTIMEPHONENUMBER = jsonObject.USERBUYAIRTIMEPHONENUMBER
                             USERBUYAIRTIMENETWORK = jsonObject.USERBUYAIRTIMENETWORK
+                            USECASHBACK = jsonObject.USECASHBACK
 
                             // Assign values to the declared variables of account funding
                             USERFUNDACCOUNT = jsonObject.USERFUNDACCOUNT
@@ -222,7 +228,8 @@ async function connectionLogic() {
                                             planCode: USERBUYDATADATAPLAN,
                                             networkCode: USERBUYDATANETWORK,
                                             phoneNumber: USERBUYDATAPHONENUMBER,
-                                            userId: formattedNumber
+                                            userId: formattedNumber,
+                                            useCashBack: USECASHBACK
                                         })
                                         console.log('DATA RESPONSE MESSAGE>>>:', responseMsg);
                                         await sock.sendMessage(
@@ -262,7 +269,8 @@ async function connectionLogic() {
                                             airtimeAmount: USERBUYAIRTIMEAMOUNT,
                                             phoneNumber: USERBUYAIRTIMEPHONENUMBER,
                                             networkCode: USERBUYAIRTIMENETWORK,
-                                            userId: formattedNumber
+                                            userId: formattedNumber,
+                                            useCashBack: USECASHBACK
                                         })
                                         console.log('AIRTIME RESPONSE MESSAGE>>>:', responseMsg);
                                         if(responseMsg){

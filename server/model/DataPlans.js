@@ -25,7 +25,7 @@ const DataPlansSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Price is required']
     },
-    discountAllowed: {
+    cashBack: {
         type: Number,
         default: 0
     },
