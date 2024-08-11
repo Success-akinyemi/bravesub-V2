@@ -4,18 +4,14 @@ import mongoose from 'mongoose';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const braveLiteAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
-// const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
-const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+//const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
 
-async function connectionLogic() {
-    // For LOCALS
-    // const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
-    // const collection = mongoose.connection.db('whatsapp_api').collection('auth_info_baileys')
+export async function sendWhatsappMsg({phoneNumber, message, useAI}) {
     const collection = mongoose.connection.collection('auth_info_baileys');
     const { state, saveCreds } = await useMongoDBAuthState(collection);
 
     const sock = makeWASocket({
-        // can provide additional config here
         printQRInTerminal: true,
         auth: state,
     });
@@ -31,16 +27,29 @@ async function connectionLogic() {
             const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
 
             if (shouldReconnect) {
-                connectionLogic();
+                connectionLogic(phoneNumber, message); // Reconnect and resend the message
             }
         }
     });
 
+    const number = phoneNumber
+    const newNumber = '234' + number.slice(1)
+    const whatsappNumber = newNumber+'@s.whatsapp.net'
+
+    let AIResponse;
+
+    if(useAI){
+        const query = `Based on this text: ${message} refactor and rewrite it to give a resonable output also add a corresponding emoji if neccessary`
+        const prompt = await braveLite.generateContent(query)
+        const response = await prompt.response;
+        AIResponse = response.text();
+    }
+
     try {
         await sock.sendMessage(
-            //phone number i will pass,
+            whatsappNumber,
             {
-                text: {/**mesdsage i will send */},
+                text: useAI ? AIResponse : message,
             }
         );
     } catch (error) {
@@ -48,12 +57,10 @@ async function connectionLogic() {
         await sock.sendMessage(
             process.env.WHATSAPPNUMBER, 
             {
-            text: `ERROR FORM WHATSAPP UNABLE TO SEND DM>>> '\n' ${error}`,
-        });
+                text: `ERROR FORM WHATSAPP UNABLE TO SEND DM>>> '\n' ${error}`,
+            }
+        );
     }
-    
 
     sock.ev.on('creds.update', saveCreds);
 }
-
-connectionLogic();

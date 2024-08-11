@@ -42,7 +42,7 @@ function ViewUser({ formData, setFormData }) {
             const confirm = window.confirm('Are you sure you want to make this user Id?')
             if(confirm){
                 const passCode = prompt('Enter a Pass Code for new Admin.')
-                console.log('PASSCODE', passCode)
+                //console.log('PASSCODE', passCode)
                 if(!passCode){
                     toast.error('Please Enter Pass Code.')
                     return
@@ -90,6 +90,10 @@ function ViewUser({ formData, setFormData }) {
                 <div className="flex items-center w-ful border-b-2 p-2 mb-2 gap-2">
                     <p className="font-bold">Mobile:</p>
                     <input type="text" id="mobile" defaultValue={formData?.mobile} onChange={handleChange} />
+                </div>
+                <div className="flex items-center w-ful border-b-2 p-2 mb-2 gap-2">
+                    <p className="font-bold">Whatsapp Number:</p>
+                    <input type="text" id="whatsappNumber" defaultValue={formData?.whatsappNumber} onChange={handleChange} />
                 </div>
                 <div className="flex items-center w-ful border-b-2 p-2 mb-2 gap-2">
                     <p className="font-bold">Username:</p>

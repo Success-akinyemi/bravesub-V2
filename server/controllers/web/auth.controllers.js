@@ -4,6 +4,7 @@ import TokenModel from "../../model/Token.js";
 import UserModel from "../../model/User.js";
 import crypto from 'crypto'
 import sendEmail from "../../middleware/sendEmail.js";
+import { sendWhatsappMsg } from "../../routes/whatsapp/sendWhatsappMsg.js";
 
 const mailGenerator = new Mailgen({
     theme: 'default',
@@ -85,7 +86,11 @@ export async function register(req, res) {
         }).save();
 
         const verifyUrl = `${process.env.MAIL_WEBSITE_LINK}/${user._id}/verify/${token.token}`;
+        if(whatsappNumber){
+            const message = `Welcome ${user.username} to brave-sub your one stop data, airtime, cable TV, electric bills plug. '\n' Please click on this link ${verifyUrl} to verify your account. '\n' Link is valid for one(1) hour`
+            await sendWhatsappMsg({phoneNumber: whatsappNumber, message, useAI: true})
 
+        }
         try {
             await registerMail({
                 username: `${user.firstName} ${user.lastName}`,
@@ -139,6 +144,10 @@ export async function verifyNewUser(req, res, next){
         await user.save()
         
         await TokenModel.deleteOne({ _id: token._id })
+        if(user.whatsappNumber){
+            const message =  `Congratulations ${user.username} you account has been verified`
+            await sendWhatsappMsg({phoneNumber: whatsappNumber, message, useAI: true})
+        }
 
         sendToken(user, 200, res)
     } catch (error) {
@@ -261,7 +270,10 @@ export async function forgotPassword (req, res, next){
         await user.save()
 
         const resetUrl = `${process.env.MAIL_WEBSITE_LINK}/reset-password/${resetToken}`
-
+        if(user.whatsappNumber){
+            const message =  `Your password reset link is: '\n' ${resetUrl} '\n' this link is valid for Ten(10) minutes.`
+            await sendWhatsappMsg({phoneNumber: whatsappNumber, message, useAI: true})
+        }
         try {
             // send mail
             const emailContent = {

@@ -77,6 +77,10 @@ function Profile({formData, setFormData}) {
               <label className="font-semibold" htmlFor="mobile">Mobile</label>
               <input type="text" id="mobile" defaultValue={formData?.mobile} onChange={handleChange} />
             </div>
+            <div className="inputGroup gap-1 mb-4">
+              <label className="font-semibold" htmlFor="mobile">Whatsapp Number</label>
+              <input type="text" id="whatsappNumber" defaultValue={formData?.whatsappNumber} onChange={handleChange} />
+            </div>
 
             <div>
               {

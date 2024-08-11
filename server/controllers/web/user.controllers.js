@@ -12,7 +12,7 @@ export async function getAllUsers(req, res){
 }
   
 export async function adminUpdateUser(req, res){
-    const { cashPoint, blocked, _id, username, firstName, lastName, mobile, email, acctBalance, referralLink, transactionTotal } = req.body
+    const { cashPoint, blocked, _id, username, firstName, lastName, mobile, email, acctBalance, referralLink, transactionTotal, whatsappNumber } = req.body
     try {
         const findUser = await UserModel.findById({ _id: _id });
         if(!findUser){
@@ -31,7 +31,8 @@ export async function adminUpdateUser(req, res){
                     mobile,
                     acctBalance,
                     referralLink,
-                    transactionTotal
+                    transactionTotal,
+                    whatsappNumber
                 }
             },
             { new: true }
@@ -44,7 +45,7 @@ export async function adminUpdateUser(req, res){
 }
 
 export async function updateUser(req, res){
-    const { _id, username, firstName, lastName, mobile, email } = req.body
+    const { _id, username, firstName, lastName, mobile, email, whatsappNumber } = req.body
     try {
         const findUser = await UserModel.findById({ _id: _id });
         if(!findUser){
@@ -59,7 +60,8 @@ export async function updateUser(req, res){
                     firstName,
                     lastName,
                     mobile,
-                    email
+                    email,
+                    whatsappNumber
                 }
             },
             { new: true }
