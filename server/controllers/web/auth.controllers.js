@@ -107,7 +107,7 @@ export async function register(req, res) {
                 text: 'Verify Email',
             });
 
-            return res.status(200).json({ success: true, data: `Verification Email Sent to ${email}` });
+            return res.status(200).json({ success: true, data: `Verification Email Sent to ${email} ${whatsappNumber ? `and to ${whatsappNumber} on whatsapp` : ''}` });
         } catch (error) {
             console.log('ERROR SENDING VERIFY EMAIL', error);
             return res.status(500).json({ success: false, data: 'Email could not be sent' });
@@ -146,7 +146,7 @@ export async function verifyNewUser(req, res, next){
         await TokenModel.deleteOne({ _id: token._id })
         if(user.whatsappNumber){
             const message =  `Congratulations ${user.username} you account has been verified`
-            await sendWhatsappMsg({phoneNumber: whatsappNumber, message, useAI: true})
+            await sendWhatsappMsg({phoneNumber: user?.whatsappNumber, message, useAI: true})
         }
 
         sendToken(user, 200, res)

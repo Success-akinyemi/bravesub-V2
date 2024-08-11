@@ -23,6 +23,7 @@ export async function adminUpdateUser(req, res){
             _id,
             {
                 $set: {
+                    email,
                     cashPoint,
                     blocked,
                     username,
@@ -105,5 +106,23 @@ export async function getAllUserReferrees(req, res){
     } catch (error) {
         console.log('COULD NOT GET ALL REFERRED USERS', error)
         res.status(500).json({ success: false, data: 'Could not get reerred Users'})
+    }
+}
+
+
+//DANGER
+export async function deleteUser(req, res) {
+    const { id } = req.body
+    try {
+        const getUser = await UserModel.findById({ _id: id})
+        if(!getUser){
+            return res.status(404).json({ success: false, data: 'User with this id not found'})
+        }
+        const deleteUser = await UserModel.findByIdAndDelete({ _id: id})
+
+        res.status(201).json({ success: true, data: 'User deleted Successful' })
+    } catch (error) {
+        console.log('UNABLE TO DELETE USER>>', error)
+        res.status(500).json({ success: false, data: error.message || 'unable to delete user'})
     }
 }
