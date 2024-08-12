@@ -111,3 +111,7 @@ export async function deleteAdmin(req, res){
         res.status(500).json({ success: false, data: error.message || 'Unable to delete admin'})
     }
 }
+
+export async function signout(req, res){
+    res.clearCookie('bravesubAtoken').status(200).json({success: true, data: 'Signout success'})
+}
