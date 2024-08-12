@@ -147,11 +147,13 @@ export async function verifyNewUser(req, res, next){
         //await UserModel.updateOne({ _id: user._id, verified: true})
         user.verified = true;
         await user.save()
-        
+        const number = user.whatsappNumber
+        console.log('NUMBBBER', number)
         await TokenModel.deleteOne({ _id: token._id })
-        if(user.whatsappNumber){
+        if(number){
+            console.log('NUMBBBER222', number)
             const message =  `Congratulations ${user.username} you account has been verified you can now buy data, airtime, cable tv subscriptions, pay electric bills from your whatsapp by just chatting with me BraveLite`
-            await sendWhatsappMsg({phoneNumber: user.whatsappNumber, message, useAI: true})
+            await sendWhatsappMsg({phoneNumber: number, message, useAI: true})
         }
 
         sendToken(user, 200, res)
