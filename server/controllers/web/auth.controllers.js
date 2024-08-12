@@ -93,9 +93,14 @@ export async function register(req, res) {
         const verifyUrl = `${process.env.MAIL_WEBSITE_LINK}/${user._id}/verify/${token.token}`;
         if(whatsappNumber){
             const message = `Welcome ${user.username} to brave-sub your one stop data, airtime, cable TV, electric bills plug. '\n' Please click on this link ${verifyUrl} to verify your account. '\n' Link is valid for one(1) hour`
-            await sendWhatsappMsg({phoneNumber: whatsappNumber, message, useAI: true})
-
+            try {
+                await sendWhatsappMsg({phoneNumber: whatsappNumber, message, useAI: true})
+            } catch (error) {
+                console.log('Failed to send WhatsApp message:', error);
+            }
+                
         }
+
         try {
             await registerMail({
                 username: `${user.firstName} ${user.lastName}`,
@@ -150,13 +155,19 @@ export async function verifyNewUser(req, res, next){
         const number = user.whatsappNumber
         console.log('NUMBBBER', number)
         await TokenModel.deleteOne({ _id: token._id })
+
+        if (number) {
+            console.log('NUMBBBER222', number);
+            const message = `Congratulations ${user.username}, your account has been verified. You can now buy data, airtime, cable TV subscriptions, and pay electric bills from your WhatsApp by just chatting with me, BraveLite.`;
+            
+            try {
+                await sendWhatsappMsg({ phoneNumber: number, message, useAI: true });
+            } catch (error) {
+                console.log('Failed to send WhatsApp message:', error);
+            }
+        }
         sendToken(user, 200, res)
 
-        if(number){
-            console.log('NUMBBBER', number)
-            const message =  `Congratulations ${user.username} you account has been verified you can now buy data, airtime, cable tv subscriptions, pay electric bills from your whatsapp by just chatting with me BraveLite`
-            await sendWhatsappMsg({phoneNumber: number, message, useAI: true})
-        }
 
     } catch (error) {
         console.log('COULD NOT VERIFY USER', error)
@@ -278,9 +289,14 @@ export async function forgotPassword (req, res, next){
         await user.save()
         const number = user.whatsappNumber
         const resetUrl = `${process.env.MAIL_WEBSITE_LINK}/reset-password/${resetToken}`
+
         if(number){
             const message =  `Your password reset link is: '\n' ${resetUrl} '\n' this link is valid for Ten(10) minutes.`
-            await sendWhatsappMsg({phoneNumber: number, message, useAI: true})
+            try {
+                await sendWhatsappMsg({phoneNumber: number, message, useAI: true})
+            } catch (error) {
+                console.log('Failed to send WhatsApp message:', error);
+            }
         }
         try {
             // send mail
