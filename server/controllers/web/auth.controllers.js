@@ -246,6 +246,17 @@ export async function login(req, res){
                         subject: 'Verify Your Email',
                         text: emailTemplate
                     })
+
+                    const number = user.whatsappNumber
+                    if(number){
+                        const message = `Hi ${user.username}, '\n' Please click on this link ${verifyUrl} to verify your account. '\n' Link is valid for one(1) hour`
+                        try {
+                            await sendWhatsappMsg({phoneNumber: number, message, useAI: true})
+                        } catch (error) {
+                            console.log('Failed to send WhatsApp message:', error);
+                        }
+                            
+                    }
         
                     return res.status(200).json({success: true, isVerified: false , data: `Verification Email Sent. Check your email address and verify your account`})
                 } catch (error) {
