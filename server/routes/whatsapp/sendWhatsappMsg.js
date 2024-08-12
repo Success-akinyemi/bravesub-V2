@@ -12,7 +12,8 @@ export async function sendWhatsappMsg({phoneNumber, message, useAI}) {
     const { state, saveCreds } = await useMongoDBAuthState(collection);
 
     const number = phoneNumber
-    const newNumber = '234' + phoneNumber.slice(1)
+    console.log('sendWhatsappMsg NUMBER', phoneNumber)
+    const newNumber = '234' + phoneNumber?.slice(1)
     const whatsappNumber = newNumber+'@s.whatsapp.net'
 
     let AIResponse;
