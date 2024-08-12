@@ -59,6 +59,11 @@ export async function register(req, res) {
             return res.status(400).json({ success: false, data: 'Phone Number already exists. Please use another Phone Number' });
         }
 
+        const existingWhatsappNumber = await UserModel.findOne({ whatsappNumber });
+        if (existingWhatsappNumber) {
+            return res.status(400).json({ success: false, data: 'Whatsapp Number already exists. Please use another Phone Number' });
+        }
+
         const user = await UserModel.create({ firstName, lastName, username, email, password, mobile, createdSource: 'web', whatsappNumber });
         console.log('USER CREATED');
 
