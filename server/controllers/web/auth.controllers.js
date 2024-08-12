@@ -19,7 +19,7 @@ export async function register(req, res) {
     const { email, username, firstName, lastName, password, mobile, ConfirmPassword, referredBy, whatsappNumber } = req.body;
 
 
-    if (!email || !password || !firstName ||!lastName || !username || !mobile || !ConfirmPassword) {
+    if (!email || !password || !firstName ||!lastName || !username || !mobile || !ConfirmPassword || !whatsappNumber) {
         return res.status(400).json({ success: false, data: 'Please provide all required fields' });
     }
 
@@ -146,7 +146,7 @@ export async function verifyNewUser(req, res, next){
         await TokenModel.deleteOne({ _id: token._id })
         if(user.whatsappNumber){
             const message =  `Congratulations ${user.username} you account has been verified you can now buy data, airtime, cable tv subscriptions, pay electric bills from your whatsapp by just chatting with me BraveLite`
-            await sendWhatsappMsg({phoneNumber: user?.whatsappNumber, message, useAI: true})
+            await sendWhatsappMsg({phoneNumber: user.whatsappNumber, message, useAI: true})
         }
 
         sendToken(user, 200, res)
