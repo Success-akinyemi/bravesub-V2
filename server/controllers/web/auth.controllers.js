@@ -91,6 +91,8 @@ export async function register(req, res) {
         }).save();
 
         const verifyUrl = `${process.env.MAIL_WEBSITE_LINK}/${user._id}/verify/${token.token}`;
+        /**
+         * 
         if(whatsappNumber){
             const message = `Welcome ${user.username} to brave-sub your one stop data, airtime, cable TV, electric bills plug. '\n' Please click on this link ${verifyUrl} to verify your account. '\n' Link is valid for one(1) hour`
             try {
@@ -100,6 +102,7 @@ export async function register(req, res) {
             }
                 
         }
+         */
 
         try {
             await registerMail({
@@ -247,6 +250,8 @@ export async function login(req, res){
                         text: emailTemplate
                     })
 
+                    /** 
+                    
                     const number = user.whatsappNumber
                     if(number){
                         const message = `Hi ${user.username}, '\n' Please click on this link ${verifyUrl} to verify your account. '\n' Link is valid for one(1) hour`
@@ -257,6 +262,7 @@ export async function login(req, res){
                         }
                             
                     }
+                    */
         
                     return res.status(200).json({success: true, isVerified: false , data: `Verification Email Sent. Check your email address and verify your account`})
                 } catch (error) {
@@ -301,6 +307,8 @@ export async function forgotPassword (req, res, next){
         const number = user.whatsappNumber
         const resetUrl = `${process.env.MAIL_WEBSITE_LINK}/reset-password/${resetToken}`
 
+        /**
+        
         if(number){
             const message =  `Your password reset link is: '\n' ${resetUrl} '\n' this link is valid for Ten(10) minutes.`
             try {
@@ -309,6 +317,7 @@ export async function forgotPassword (req, res, next){
                 console.log('Failed to send WhatsApp message:', error);
             }
         }
+        */
         try {
             // send mail
             const emailContent = {
