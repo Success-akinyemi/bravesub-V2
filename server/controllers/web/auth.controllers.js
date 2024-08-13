@@ -159,6 +159,7 @@ export async function verifyNewUser(req, res, next){
         console.log('NUMBBBER', number)
         await TokenModel.deleteOne({ _id: token._id })
 
+        /**
         if (number) {
             console.log('NUMBBBER222', number);
             const message = `Congratulations ${user.username}, your account has been verified. You can now buy data, airtime, cable TV subscriptions, and pay electric bills from your WhatsApp by just chatting with me, BraveLite.`;
@@ -169,6 +170,7 @@ export async function verifyNewUser(req, res, next){
                 console.log('Failed to send WhatsApp message:', error);
             }
         }
+        */
         sendToken(user, 200, res)
 
 

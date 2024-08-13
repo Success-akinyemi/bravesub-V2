@@ -41,7 +41,7 @@ function Dashboard() {
   return (
     <div className="page">
         <Navbar />
-        <Announcement text={'bravesub version 2 is coming out soon'} />
+        <Announcement text={'Buy airtime, data, cable tv subscriptions, electric bills directly from whatsapp'} />
         <div className="mt-5 bg-white rounded-3xl overflow-hidden">
           <AccountBalance />
           <div className="pt-1 pb-1 pl-5 pr-5 flex text-[15px] small-phone:text-[12px] font-semibold">

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { services } from "../data/services"
 import { useSwipeable } from "react-swipeable"
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 
 function Services() {
@@ -104,10 +105,10 @@ function Services() {
               >
                 {
                     displayServices.map((item, idx) => (
-                        <div key={idx} className="m-4 flex flex-col items-center justify-center">
+                        <Link to={`/${item.link}`} key={idx} className="m-4 flex flex-col items-center justify-center">
                             <img className="w-13 sm:w-10 phone:w-[20px]" src={item?.icon} alt={item?.service} />
                             <p className="font-semibold text-center phone:text-[13px]">{item?.service}</p>
-                        </div>
+                        </Link>
                     ))
                 }
               </motion.div>

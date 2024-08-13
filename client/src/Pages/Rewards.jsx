@@ -87,7 +87,7 @@ function Rewards() {
                       <div class="mt-[4rem] mb-[4rem] loading-spinner"></div>
                     </div>
                   ) : (
-                    referrees.map((item) => (
+                    referrees?.map((item) => (
                       <div className="flex items-center justify-between phone:text-[14px] small-phone:text-[13px] border-b-2 p-1">
                         <span className="">{item?.name}</span>
                         <span className={`${item?.verified ? 'text-green-700' : 'text-red-700'} font-bold`}>{item?.verified ? 'Verified' : 'Not Verified'}</span>
