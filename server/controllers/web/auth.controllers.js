@@ -309,17 +309,16 @@ export async function forgotPassword (req, res, next){
         const number = user.whatsappNumber
         const resetUrl = `${process.env.MAIL_WEBSITE_LINK}/reset-password/${resetToken}`
 
-        /**
         
         if(number){
             const message =  `Your password reset link is: '\n' ${resetUrl} '\n' this link is valid for Ten(10) minutes.`
             try {
-                await sendWhatsappMsg({phoneNumber: number, message, useAI: true})
+                await sendWhatsappMsg({phoneNumber: number, message, userId: user._id, useAI: true})
             } catch (error) {
                 console.log('Failed to send WhatsApp message:', error);
             }
         }
-        */
+        
         try {
             // send mail
             const emailContent = {

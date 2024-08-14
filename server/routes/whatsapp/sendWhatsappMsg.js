@@ -2,18 +2,21 @@ import { DisconnectReason, useMultiFileAuthState, makeWASocket } from '@whiskeys
 import useMongoDBAuthState from '../../model/useMongoDBAuthState.js';
 import mongoose from 'mongoose';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import UserModel from '../../model/User.js';
 
 const braveLiteAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 //const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
 
-export async function sendWhatsappMsg({phoneNumber, message, useAI}) {
+export async function sendWhatsappMsg({phoneNumber, message, userId, useAI}) {
     const collection = mongoose.connection.collection('auth_info_baileys');
     const { state, saveCreds } = await useMongoDBAuthState(collection);
 
-    const number = phoneNumber
-    console.log('sendWhatsappMsg NUMBER', phoneNumber)
-    const newNumber = '234' + phoneNumber?.slice(1)
+    const user = await UserModel.findById({ _id: userId })
+    const number = phoneNumber ? phoneNumber : user.whatsappNumber
+
+    console.log('sendWhatsappMsg NUMBER', number)
+    const newNumber = '234' + number?.slice(1)
     const whatsappNumber = newNumber+'@s.whatsapp.net'
 
     let AIResponse;
