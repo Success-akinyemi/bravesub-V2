@@ -11,7 +11,7 @@ import schedule from 'node-schedule'
 const braveLiteAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 //const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
 // const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro-vision' });
-const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-1.5-flash-001' });
 
 // Declare variables to monitor the last chat of the bot and get the keywords, intercept message flow, and carry out transactions
 let USECASHBACK = false;

@@ -111,7 +111,7 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
         return;
       }
 
-
+      setformData({...formData, addMeterIdToList: isAddToList })
       setSelectedCard('payElectricBilsModal')
     }
   return (
