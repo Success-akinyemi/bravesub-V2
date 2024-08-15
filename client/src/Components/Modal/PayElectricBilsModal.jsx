@@ -1,8 +1,11 @@
 
 
 function PayElectricBilsModal({setFormData, formData}) {
+    console.log('form', formData)
   return (
-    <div>PayElectricBilsModal</div>
+    <div>
+
+    </div>
   )
 }
 

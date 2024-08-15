@@ -11,6 +11,7 @@ import Login from './Pages/Authorization/Login'
 import { useEffect, useState } from 'react'
 import AirtimePayment from './Components/Modal/AirtimePayment'
 import DataPayment from './Components/Modal/DataPayment'
+import PayElectricBilsModal from './Components/Modal/PayElectricBilsModal'
 import { Toaster } from 'react-hot-toast'
 import EmailVerification from './Pages/Authorization/EmailVerification'
 import ForgotPassword from './Pages/Authorization/ForgotPassword'
@@ -80,7 +81,7 @@ function App() {
       case 'payElectricBilsModal':
         return (
           <div>
-              <payElectricBilsModal formData={formData} setFormData={setFormData} />  
+              <PayElectricBilsModal formData={formData} setFormData={setFormData} />  
           </div>
         )
     }
