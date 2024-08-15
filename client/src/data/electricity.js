@@ -5,6 +5,7 @@ export const electricityProviders = [
         name: 'Ikeja Electric',
         banner: '',
         bannerColor: '',
+        code: 1,
     },
     {
         _id: 2,
@@ -12,6 +13,7 @@ export const electricityProviders = [
         name: 'Eko Electric',
         banner: '',
         bannerColor: '',
+        code: 2,
     },
     {
         _id: 3,
@@ -19,6 +21,7 @@ export const electricityProviders = [
         name: 'Abuja Electric',
         banner: '',
         bannerColor: '',
+        code: 3,
     },
     {
         _id: 4,
@@ -26,6 +29,7 @@ export const electricityProviders = [
         name: 'Kano Electric',
         banner: '',
         bannerColor: '',
+        code: 4,
     },
     {
         _id: 5,
@@ -33,6 +37,7 @@ export const electricityProviders = [
         name: 'Enugu Electric',
         banner: '',
         bannerColor: '',
+        code: 5,
     },
     {
         _id: 6,
@@ -40,6 +45,7 @@ export const electricityProviders = [
         name: 'Port Harcourt Electric',
         banner: '',
         bannerColor: '',
+        code: 6,
     },
     {
         _id: 7,
@@ -47,6 +53,7 @@ export const electricityProviders = [
         name: 'Ibadan Electric',
         banner: '',
         bannerColor: '',
+        code: 7,
     },
     {
         _id: 8,
@@ -54,6 +61,7 @@ export const electricityProviders = [
         name: 'Kaduna Electric',
         banner: '',
         bannerColor: '',
+        code: 8,
     },
     {
         _id: 9,
@@ -61,6 +69,7 @@ export const electricityProviders = [
         name: 'Jos Electric',
         banner: '',
         bannerColor: '',
+        code: 9,
     },
     {
         _id: 11,
@@ -68,13 +77,15 @@ export const electricityProviders = [
         name: 'Yola Electric',
         banner: '',
         bannerColor: '',
+        code: 11,
     },
     {
         _id: 13,
         icon: '',
-        name: 'YBenin Electric',
+        name: 'Benin Electric',
         banner: '',
         bannerColor: '',
+        code: 13,
     },
 ]
 
@@ -86,5 +97,36 @@ export const accountType = [
     {
         _id: 2,
         type: 'Postpaid'
+    },
+]
+
+export const quickPrices = [
+    {
+        _id: 1,
+        amount: 600,
+        cashback: '',
+    },
+    {
+        _id: 2,
+        amount: 1000,
+        cashback: '',
+    },    {
+        _id: 3,
+        amount: 2000,
+        cashback: '',
+    },    {
+        _id: 4,
+        amount: 3000,
+        cashback: '',
+    },
+    {
+        _id: 5,
+        amount: 5000,
+        cashback: '',
+    },
+    {
+        _id: 6,
+        amount: 50000,
+        cashback: '',
     },
 ]

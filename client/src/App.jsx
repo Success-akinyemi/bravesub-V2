@@ -77,6 +77,12 @@ function App() {
             <EditDataPlan formData={formData} setFormData={setFormData} />            
           </div>
         )
+      case 'payElectricBilsModal':
+        return (
+          <div>
+              <payElectricBilsModal formData={formData} setFormData={setFormData} />  
+          </div>
+        )
     }
   }
 

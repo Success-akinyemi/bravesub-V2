@@ -21,7 +21,7 @@ function WhatsappVerifyPayment() {
                 toast.success('Account Funding Successful')
                 setText('Payment Verified... redirecting to whatsapp')
                 //redirect back to whatsapp
-                window.location.href = 'https://wa.me/2349033626014'
+                window.location.href = 'https://wa.me/2349033626014?text=I%20have%20funded%20my%20account.'
               }
             } catch (error) {
               console.error('Error posting payment reference:', error);

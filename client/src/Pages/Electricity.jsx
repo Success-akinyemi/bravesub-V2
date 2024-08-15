@@ -2,25 +2,117 @@ import { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Announcement from "../Components/Announcement";
+import { FaListUl } from "react-icons/fa";
+import { IoMdCloseCircle } from "react-icons/io";
+import { quickPrices } from "../data/electricity";
+import { FaNairaSign } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import LogoImg from '../assets/logo.png'
 
 function Electricity({formData, setformData, setSelectedCard, providerIcon, providerName, meterType}) {
+    const { currentUser } = useSelector((state) => state.braveSubUser);
+    const user = currentUser?.data
+
     const [ isAnnouncement, setIsAnnouncement ] = useState(true)
+    const [ providerNameError, setProviderNameError ] = useState(null)
+    const [ meterTypeError, setMeterTypeError ] = useState(null)
+
     const [ meterIdErrorText, setMeterIdErrorText ] = useState(null)
+    const [ meterId, setMeterId ] = useState()
+    const [ meterIdFocused, setMeterIdFocused ] = useState(false)
+    const [ prevMeterIds, setPrevMeterIds ] = useState(false)
+
     const [ amountErrorText, setAmountErrorText ] = useState(null)
+    const [ meterAmountFocused, setMeterAmountFocused ] = useState(false)
+    const [ amount, setAmount ] = useState()
     const [ isAddToList, setIsAddToList ] = useState(true)
 
+    const quickAmounts = quickPrices
 
+
+    useEffect(() => {
+        console.log('FORM DATA', formData)
+        if(formData.providerName){
+          setProviderNameError(null)
+        }
+        if(formData.meterType){
+          setMeterTypeError(null)
+        }
+                
+      }, [formData])
+      
+    const handleMeterNumberInput = (e) => {
+        setMeterIdErrorText(null)
+        setMeterId(e.target.value)
+        setformData({ ...formData, meterNumber: e.target.value})
+    }
+
+    const handleMeterAmount = (e) => {
+      setAmountErrorText(null)
+      setAmount(e.target.value)
+      setformData({ ...formData, amount: e.target.value})
+    }
+
+    const setAmountValue = (item) => {
+      setAmountErrorText(null)
+      setAmount(item?.amount)
+      setformData({ ...formData, amount: item?.amount})
+    }
+
+    const removeAmount = () => {
+      setAmount('')
+      setformData({ ...formData, amount: ''})
+    }
+
+    const removeMeterId = () => {
+        console.log('first')
+        setMeterId('')
+        setformData({...formData, meterNumber: ''})
+    }
 
     const handleServices = () => {
         setSelectedCard('electricServiceProviders')
     }
 
-    const addToList = () => {
+    const addToList = (prev) => {
         setIsAddToList((prev) => !prev)
+        setformData({ ...formData, addMeterIdToList: !prev })
     }
 
     const handleMeterType = () => {
         setSelectedCard('electricMeterType')
+    }
+
+    const handlePay = () => {
+      if(!formData.providerName){
+        setProviderNameError('Select a service provider name')
+        return;
+      }
+      if(!formData.meterType){
+        setMeterTypeError('select a meter type')
+        return;
+      }
+      const regex = /^[0-9]+$/;
+
+      if(!formData.meterNumber){
+        setMeterIdErrorText('Enter Meter number')
+        return;
+      }
+      if(!regex.test(formData.meterNumber)){
+        setMeterIdErrorText('Enter a valid meter number')
+        return;
+      }
+      if(!formData.amount){
+        setAmountErrorText('Enter amount')
+        return;
+      }
+      if(!regex.test(formData.amount)){
+        setAmountErrorText('Enter a valid amount number')
+        return;
+      }
+
+
+      setSelectedCard('payElectricBilsModal')
     }
   return (
     <div className="page pt-0">
@@ -46,7 +138,7 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
       {/**MAIN */}
       {/**Service providers */}
       <div className={`${isAnnouncement ? 'mt-[15px]' : 'mt-[50px]' } flex flex-col relative w-full overflow-x-hidden bg-white rounded-3xl p-3`}>
-        <div className={`flex items-center justify-between cursor-pointer p-2 border-b-[1px] border-b-gray-400`} onClick={handleServices}>
+        <div className={`flex items-center justify-between cursor-pointer p-2 border-b-[1px] ${providerNameError ? 'border-b-[2px] border-b-red-600' : 'border-b-gray-400'} `} onClick={handleServices}>
             <div className="flex items-center gap-[4px]">
                 <img src={providerIcon} alt='' className="w-[15px]" />
                 <h2 className="font-semibold">{providerName}</h2>
@@ -56,7 +148,11 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
 
             </div>
         </div>
-
+        {
+                providerNameError && (
+                  <p className="text-red-600 text-[15px] font-semibold">{providerNameError}</p>
+                )
+              }
         <div className="w-full p-2">
             <p className="text-[12px] phone:text-[11px] text-gray-500">Ensure you have validated your KYC online to be able to recharge your meter</p>
         </div>
@@ -65,24 +161,103 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
       {/**Payment item */}
       <div className="mt-[2rem] flex flex-col relative w-full overflow-x-hidden bg-white rounded-3xl p-3">
         <p>Payment Items</p>
-        <div  onClick={handleMeterType} className="flex items-center justify-between p-2 border-b-[1px] border-b-gray-400">
+        <div  onClick={handleMeterType} className={`flex items-center justify-between p-2 border-b-[1px] ${meterTypeError ? 'border-b-[2px] border-b-red-600' : 'border-b-gray-400'}`}>
             <p className="text-[24px] font-semibold">{meterType}</p>
             <div></div>
         </div>
+        {
+                meterTypeError && (
+                  <p className="text-red-600 text-[15px] font-semibold">{meterTypeError}</p>
+                )
+              }
 
         <div className="mt-4 flex flex-col">
             <span>Meter Number</span>
-            <div className="relative w-full flex items-center">
-                <input className="w-full" />
+            <div className={`relative w-full flex items-center border-b-[3px] ${meterIdFocused && !meterIdErrorText ? 'border-b-main-color' : meterIdErrorText ? 'border-b-red-600' : 'border-b-black'} `}>
+                <input 
+                    placeholder="Enter Meter Number" 
+                    onChange={handleMeterNumberInput}  
+                    value={meterId}
+                    className="w-full border-none outline-none focus:border-none" 
+                    onFocus={() => setMeterIdFocused(true)}
+                    onBlur={() => setMeterIdFocused(false)}
+                />
+                {
+                    meterIdFocused && meterId !== '' ? (
+                            <IoMdCloseCircle onClick={removeMeterId} className="size-[30px] z-30 cursor-pointer text-gray-400" />
+                        ) : (
+                            <FaListUl onClick={() => setPrevMeterIds((prev) => !prev)} className="text-main-color z-30 bg-light-bg p-[2px] text-[25px] rounded-[3px] font-bold" />
+                        )
+                }
             </div>
+            {
+                meterIdErrorText && (
+                  <p className="text-red-600 text-[15px] font-semibold">{meterIdErrorText}</p>
+                )
+            }
         </div>
 
         <div className="w-full flex items-center justify-between mt-4">
             <p className="text-[14px] phone:text-[12px]">Save to histroy list</p>
-            <div onClick={addToList} className={`bg-gray-400 pl-[4px] pr-[4px] pt-[5px] pb-[5px] small-phone:pt-[3px] small-phone:pb-[3px] w-[45px] small-phone:w-[40px] h-[26px] small-phone:h-[20px] flex items-center rounded-xl cursor-pointer relative ${isAddToList ? 'bg-green-500': '' }`}>
+            <div onClick={() => addToList(isAddToList)} className={`bg-gray-400 pl-[4px] pr-[4px] pt-[5px] pb-[5px] small-phone:pt-[3px] small-phone:pb-[3px] w-[45px] small-phone:w-[40px] h-[26px] small-phone:h-[20px] flex items-center rounded-xl cursor-pointer relative ${isAddToList ? 'bg-green-500': '' }`}>
                 <div className={`h-[20px] w-[20px] small-phone:h-[15px] small-phone:w-[15px] bg-white  rounded-full  ${isAddToList ? 'absolute right-1' : ''}`}></div>
             </div>
         </div>
+      </div>
+
+      {/**Amount */}
+      <div className='mt-[2rem] flex flex-col relative w-full overflow-x-hidden bg-white rounded-3xl p-3'>
+          <p className="phone:text-[14px] small-phone:text-[13px]">Select Amount</p>
+          <div className="grid grid-cols-3 items-center justify-center mt-2 gap-4 phone:gap-2 text-black">
+              {
+                quickAmounts.map((item) => (
+                  <div key={item._id} onClick={() => setAmountValue(item)} className="flex flex-col items-center justify-center cursor-pointer bg-gray-200 rounded-lg flex-wrap flex-1 p-3">
+                      <span className="flex items-baseline">
+                        <FaNairaSign className="text-[16px] phone:text-[14px] small-phone:text-[13px]" />
+                        <h3 className="text-[30px] phone:text-[28px] small-phone:text-[25px]">{item?.amount}</h3>
+                      </span>
+                      <p className="flex items-center text-[15px] phone:text-[13px] text-main-color">
+                        {
+                            item?.cashback ? (
+                              <>
+                                <FaNairaSign /> {item?.cashback}                           
+                              </>
+                            ) : (
+                              ''
+                            )
+                        }
+                      </p>
+                  </div>
+                ))
+              }
+          </div>
+          <div className="w-full mt-3 flex flex-col">
+              <div className={`flex p-3 items-center border-b-[2px] ${meterAmountFocused && !amountErrorText ? 'border-b-main-color' : amountErrorText ? 'border-b-red-600' : 'border-b-gray-400'} gap-1`}>
+                <FaNairaSign className="text-black text-[28px]" />
+                <input 
+                  type="text" 
+                  className="w-full text-[30px] font-semibold text-black border-none outline-none focus:border-none" 
+                  value={amount}
+                  onChange={handleMeterAmount}
+                  onFocus={() => setMeterAmountFocused(true)}
+                  onBlur={() => setMeterAmountFocused(false)}
+                />
+                <IoMdCloseCircle onClick={removeAmount} className="size-[36px] cursor-pointer text-gray-400" />
+                <div onClick={handlePay}>
+                  <button className="btn">pay</button>
+                </div>
+              </div>
+              {
+                amountErrorText && (
+                  <p className="text-red-600 text-[15px] font-semibold">{amountErrorText}</p>
+                )
+              }
+              <div className="text-[14px] mt-4 flex items-center gap-1">
+                <img src={LogoImg} className="w-[30px] phone:w-[25px] small-phone:w-[20px]" />
+                <span className="text-main-color font-semibold">{user?.cashPoint} BravePoints</span>
+                <span>Availble</span>
+              </div>
+          </div>
       </div>
 
     </div>

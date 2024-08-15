@@ -8,7 +8,7 @@ function ElectricServiceProviders({setFormData, formData, setSelectedCard, setPr
     const handleServices = (item) => {
         setProviderName(item?.name)
         setProviderIcon(item?.icon)
-        setFormData({ ...formData, providerName: item?.name, })
+        setFormData({ ...formData, providerName: item?.name, electricProviderCode: item?.code })
         setSelectedCard(null)
     }
     return (

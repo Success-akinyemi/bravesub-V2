@@ -91,8 +91,7 @@ export async function register(req, res) {
         }).save();
 
         const verifyUrl = `${process.env.MAIL_WEBSITE_LINK}/${user._id}/verify/${token.token}`;
-        /**
-         * 
+
         if(whatsappNumber){
             const message = `Welcome ${user.username} to brave-sub your one stop data, airtime, cable TV, electric bills plug. '\n' Please click on this link ${verifyUrl} to verify your account. '\n' Link is valid for one(1) hour`
             try {
@@ -102,7 +101,7 @@ export async function register(req, res) {
             }
                 
         }
-         */
+         
 
         try {
             await registerMail({
@@ -159,18 +158,17 @@ export async function verifyNewUser(req, res, next){
         console.log('NUMBBBER', number)
         await TokenModel.deleteOne({ _id: token._id })
 
-        /**
         if (number) {
             console.log('NUMBBBER222', number);
             const message = `Congratulations ${user.username}, your account has been verified. You can now buy data, airtime, cable TV subscriptions, and pay electric bills from your WhatsApp by just chatting with me, BraveLite.`;
             
             try {
-                await sendWhatsappMsg({ phoneNumber: number, message, useAI: true });
+                await sendWhatsappMsg({ phoneNumber: number, message, userId: user._id, useAI: true });
             } catch (error) {
                 console.log('Failed to send WhatsApp message:', error);
             }
         }
-        */
+        
         sendToken(user, 200, res)
 
 
