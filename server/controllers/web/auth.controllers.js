@@ -95,7 +95,7 @@ export async function register(req, res) {
         if(whatsappNumber){
             const message = `Welcome ${user.username} to brave-sub your one stop data, airtime, cable TV, electric bills plug. '\n' Please click on this link ${verifyUrl} to verify your account. '\n' Link is valid for one(1) hour`
             try {
-                await sendWhatsappMsg({phoneNumber: whatsappNumber, message, useAI: true})
+                await sendWhatsappMsg({phoneNumber: whatsappNumber, userId: user._id, message, useAI: true})
             } catch (error) {
                 console.log('Failed to send WhatsApp message:', error);
             }
