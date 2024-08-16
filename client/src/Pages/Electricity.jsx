@@ -8,6 +8,8 @@ import { quickPrices } from "../data/electricity";
 import { FaNairaSign } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import LogoImg from '../assets/logo.png'
+import { IoIosArrowDown } from "react-icons/io";
+import { verifyElectricMeterNumber } from "../Helpers/api";
 
 function Electricity({formData, setformData, setSelectedCard, providerIcon, providerName, meterType}) {
     const { currentUser } = useSelector((state) => state.braveSubUser);
@@ -27,18 +29,46 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
     const [ amount, setAmount ] = useState()
     const [ isAddToList, setIsAddToList ] = useState(true)
 
+    const [ verifiedMeterName, setVerifiedMeterName ] = useState()
+    const [ fetchingUserDetails, setFetchingUserDetails ] = useState(false)
+
     const quickAmounts = quickPrices
+
+    //previous meter numbers
+    const bravesubusermeternumber = JSON.parse(localStorage.getItem('bravesubelectricmeternumber')) || [];
 
 
     useEffect(() => {
-        console.log('FORM DATA', formData)
         if(formData.providerName){
           setProviderNameError(null)
         }
         if(formData.meterType){
           setMeterTypeError(null)
         }
-                
+
+        const fetchData = async () => {
+          if (formData?.meterSlug && formData?.meterNumber?.length > 10) {
+            
+            try {
+              setFetchingUserDetails(true)
+              const electricCompany = formData?.meterSlug
+              const userMeterNumber = formData?.meterNumber
+              const res = await verifyElectricMeterNumber({ electricCompany, userMeterNumber });
+              if(res.success){
+                setVerifiedMeterName(res?.data);
+              } else{
+                setVerifiedMeterName(res?.data);
+              }
+            } catch (error) {
+
+            } finally {
+              setFetchingUserDetails(false);
+            }
+          }
+        };
+    
+
+        fetchData();                
       }, [formData])
       
     const handleMeterNumberInput = (e) => {
@@ -65,9 +95,8 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
     }
 
     const removeMeterId = () => {
-        console.log('first')
-        setMeterId('')
-        setformData({...formData, meterNumber: ''})
+      setMeterId('')
+      setformData({...formData, meterNumber: ''})
     }
 
     const handleServices = () => {
@@ -82,6 +111,20 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
     const handleMeterType = () => {
         setSelectedCard('electricMeterType')
     }
+
+    const setQuickMeterNumber = (number) => {
+      setMeterIdErrorText(null)
+      setMeterId()
+      setformData({...formData, meterNumber: ''})
+      setMeterId(number)
+      setformData({...formData, meterNumber: number})
+      setPrevMeterIds(false)
+    }
+
+    const removeMeterNumberFromStorage = (number) => {
+      const updatedNumbers = bravesubusermeternumber.filter(item => item.meterNumber !== number);
+      localStorage.setItem('bravesubelectricmeternumber', JSON.stringify(updatedNumbers));
+    };
 
     const handlePay = () => {
       if(!formData.providerName){
@@ -98,7 +141,7 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
         setMeterIdErrorText('Enter Meter number')
         return;
       }
-      if(!regex.test(formData.meterNumber)){
+      if(!regex.test(formData.meterNumber) || formData?.meterNumber?.length < 10 || formData?.meterNumber?.length > 13){
         setMeterIdErrorText('Enter a valid meter number')
         return;
       }
@@ -111,8 +154,9 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
         return;
       }
 
-      setformData({...formData, addMeterIdToList: isAddToList })
+      setformData({...formData, addMeterIdToList: isAddToList, verifiedMeterName: verifiedMeterName })
       setSelectedCard('payElectricBilsModal')
+
     }
   return (
     <div className="page pt-0">
@@ -137,7 +181,7 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
 
       {/**MAIN */}
       {/**Service providers */}
-      <div className={`${isAnnouncement ? 'mt-[15px]' : 'mt-[50px]' } flex flex-col relative w-full overflow-x-hidden bg-white rounded-3xl p-3`}>
+      <div className={`${isAnnouncement ? 'mt-[15px]' : 'mt-[65px]' } flex flex-col relative w-full overflow-x-hidden bg-white rounded-3xl p-3`}>
         <div className={`flex items-center justify-between cursor-pointer p-2 border-b-[1px] ${providerNameError ? 'border-b-[2px] border-b-red-600' : 'border-b-gray-400'} `} onClick={handleServices}>
             <div className="flex items-center gap-[4px]">
                 <img src={providerIcon} alt='' className="w-[15px]" />
@@ -145,7 +189,7 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
             </div>
             
             <div>
-
+              <IoIosArrowDown />
             </div>
         </div>
         {
@@ -163,7 +207,9 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
         <p>Payment Items</p>
         <div  onClick={handleMeterType} className={`flex items-center justify-between p-2 border-b-[1px] ${meterTypeError ? 'border-b-[2px] border-b-red-600' : 'border-b-gray-400'}`}>
             <p className="text-[24px] font-semibold">{meterType}</p>
-            <div></div>
+            <div>
+              <IoIosArrowDown />
+            </div>
         </div>
         {
                 meterTypeError && (
@@ -171,7 +217,7 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
                 )
               }
 
-        <div className="mt-4 flex flex-col">
+        <div className="mt-4 flex flex-col relative">
             <span>Meter Number</span>
             <div className={`relative w-full flex items-center border-b-[3px] ${meterIdFocused && !meterIdErrorText ? 'border-b-main-color' : meterIdErrorText ? 'border-b-red-600' : 'border-b-black'} `}>
                 <input 
@@ -190,11 +236,46 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
                         )
                 }
             </div>
+            <div>
+              <p>
+                {
+                  fetchingUserDetails ? 
+                    <div className="flex items-center gap-1 text-main-color mt-3 phone:text-[14px]">
+                      <div className='mt-0 mb-0'>
+                        <div class="loading-spinner-small h-5 w-5 border-3 mt-[0px] mb-[0px]"></div>
+                      </div>
+                        Checking...
+                    </div> : 
+                  verifiedMeterName ? 
+                    <p className="text-black font-semibold mt-1">METER NAME: {verifiedMeterName.trim()}</p> :
+                    ''
+                }
+              </p>
+            </div>
             {
                 meterIdErrorText && (
                   <p className="text-red-600 text-[15px] font-semibold">{meterIdErrorText}</p>
                 )
             }
+            {
+                  prevMeterIds && bravesubusermeternumber.length > 0 && (
+                    <div className="p-3 z-40 rounded-2xl bg-white shadow-2xl absolute right-8 top-6 small-phone:top-[-24px]">
+                      {
+                        bravesubusermeternumber?.map((item) => (
+                          <div key={item?.meterNumber} className=" flex items-center justify-between border-b-[3px] pb-2 pt-2">
+                            <p className="font-bold text-gray-700 mr-[5rem] phone:mr-[2.5rem] w-full small-phone:text-[14px]" onClick={() => setQuickMeterNumber(item?.meterNumber)} >{item.meterNumber}</p>
+                            <span className="text-gray-600 text-[15px] mr-[1rem] phone:text-[13px] small-phone:text-[11px]">{item.lastBought}</span>
+                            <span className=""
+                              onClick={() => removeMeterNumberFromStorage(item.meterNumber)}
+                            >
+                              <IoMdCloseCircle className="text-gray-600 cursor-pointer text-[18px] phone:text-[16px]" />
+                            </span>
+                          </div>
+                        ))
+                      }
+                    </div>
+                  )
+                }
         </div>
 
         <div className="w-full flex items-center justify-between mt-4">

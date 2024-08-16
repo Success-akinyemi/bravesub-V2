@@ -154,7 +154,59 @@ export async function handleWhatappPay(formData){
 }
 
 
+//ELECTRICITY
+export async function buyElectricityBills(formData) {
+    try{
+        const res =  await axios.post('/electricity/buyElectricityBills', formData, {withCredentials: true})
+        if(res.data){
+            return res.data
+        }
+    } catch {
+        const errorMsg = error.response.data.data || 'Unable to purchase electricity'
+        toast.error(errorMsg)
+        //console.log('METER NUMBER VERIFICATION ERROR', error)
+    }
+}
 
+export async function verifyElectricMeterNumber({electricCompany, userMeterNumber}) {
+    try{
+        const res =  await axios.post('/electricity/verifyElectricMeterNumber', {electricCompany, userMeterNumber}, {withCredentials: true})
+        if(res.data){
+            return res.data
+        }
+    } catch {
+        const errorMsg = error.response.data.data || 'Invalid meter name'
+        toast.error(errorMsg)
+        //console.log('METER NUMBER VERIFICATION ERROR', error)
+    }
+}
+
+//CABLE TV
+export async function verifySmartCardName({smartCardNumber,cableTvCode}) {
+    try{
+        const res =  await axios.post('/cableTv/verifyCableTvSmartCard', {smartCardNumber,cableTvCode}, {withCredentials: true})
+        if(res.data){
+            return res.data
+        }
+    } catch {
+        const errorMsg = error.response.data.data || 'Invalid Smartcard name'
+        toast.error(errorMsg)
+        //console.log('METER NUMBER VERIFICATION ERROR', error)
+    }
+}
+
+export async function buyCableTv(formData) {
+    try{
+        const res =  await axios.post('/cableTv/buyCableTv', formData, {withCredentials: true})
+        if(res.data){
+            return res.data
+        }
+    } catch {
+        const errorMsg = error.response.data.data || 'Unable to purchase cable tv bills'
+        toast.error(errorMsg)
+        //console.log('METER NUMBER VERIFICATION ERROR', error)
+    }
+}
 
 //ADMIN ROUTES
 

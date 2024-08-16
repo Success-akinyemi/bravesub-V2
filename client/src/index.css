@@ -118,6 +118,11 @@ input.gray:focus{
 }
 
 .loading-spinner {
-  @apply h-8 w-8 border-4 mt-[4rem] mb-[4em] border-purple-500 border-t-transparent border-r-transparent border-b-transparent border-l-purple-500 rounded-full m-auto;
+  @apply h-8 w-8 border-4 mt-[4rem] mb-[4rem] border-purple-500 border-t-transparent border-r-transparent border-b-transparent border-l-purple-500 rounded-full m-auto;
+  animation: loading-spinner 0.8s ease infinite;
+}
+
+.loading-spinner-small{
+  @apply border-4 border-purple-500 border-t-transparent border-r-transparent border-b-transparent border-l-purple-500 rounded-full m-auto;
   animation: loading-spinner 0.8s ease infinite;
 }

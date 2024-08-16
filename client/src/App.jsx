@@ -11,7 +11,6 @@ import Login from './Pages/Authorization/Login'
 import { useEffect, useState } from 'react'
 import AirtimePayment from './Components/Modal/AirtimePayment'
 import DataPayment from './Components/Modal/DataPayment'
-import PayElectricBilsModal from './Components/Modal/PayElectricBilsModal'
 import { Toaster } from 'react-hot-toast'
 import EmailVerification from './Pages/Authorization/EmailVerification'
 import ForgotPassword from './Pages/Authorization/ForgotPassword'
@@ -33,6 +32,10 @@ import ElectricServiceProviders from './Components/Helpers/ElectricServiceProvid
 import TvServiceProviders from './Components/Helpers/TvServiceProviders'
 import { accountType, electricityProviders } from './data/electricity'
 import ElectricMeterType from './Components/Helpers/ElectricMeterType'
+import PayElectricBilsModal from './Components/Modal/PayElectricBilsModal'
+import { cableTvs } from './data/cableTv'
+import PayCableTv from './Components/Modal/PayCableTv'
+import ElectricitySettings from './Admin/ElectricitySettings'
 
 
 function App() {
@@ -43,13 +46,21 @@ function App() {
   const [ providerIcon, setProviderIcon ] = useState('')
   const [ meterType, setMeterType ] = useState('')
 
+  const [ cableTvName, setCableTvName ] = useState()
+  const [ cableTvIcon, setCableTvIcon ] = useState('')
+
   const electricityServices = electricityProviders
   const electricityAccount = accountType
+
+  const tvProviders = cableTvs
   
   useEffect(() => {
       setProviderName(electricityServices[0].name)
       setProviderIcon(electricityServices[0].icon)
       setMeterType(electricityAccount[0].type)
+
+      setCableTvName(tvProviders[0].name)
+      setCableTvIcon(tvProviders[0].icon)
   }, [electricityServices, electricityAccount])
 
   const renderPopup = () => {
@@ -78,12 +89,6 @@ function App() {
             <EditDataPlan formData={formData} setFormData={setFormData} />            
           </div>
         )
-      case 'payElectricBilsModal':
-        return (
-          <div>
-              <PayElectricBilsModal formData={formData} setFormData={setFormData} />  
-          </div>
-        )
     }
   }
 
@@ -97,19 +102,23 @@ function App() {
       <BrowserRouter>
       {
         selectedCard && (
-        <div className='fixed w-[100vw] h-[100vh] top-0 left-0 bg-black bg-opacity-80 z-50 overflow-x-hidden'>
-          <div className={`bg-main-bg w-full absolute flex flex-col bottom-0 left-0 ${selectedCard === 'electricMeterType' ? 'h-[50vh]' : 'h-[80vh] phone:h-[85vh] small-phone:h-[95vh]' } rounded-tl-[4rem] rounded-tr-[4rem] pl-6 pr-6 pt-4 pb-4`}>
-            <span onClick={closePopup} className='text-[40px] small-phone:text-[35px] font-extralight border-[3px] text-gray-600 cursor-pointer rounded-full border-gray-600 h-[40px] w-[40px] small-phone:h-[35px] small-phone:w-[35px] flex items-center justify-center ml-auto'>&times;</span>
-            <div className='h-full relative'>
-              {
-                selectedCard === 'electricServiceProviders' ? <ElectricServiceProviders setFormData={setFormData} formData={formData} setSelectedCard={setSelectedCard} setProviderIcon={setProviderIcon} setProviderName={setProviderName} /> : 
-                selectedCard === 'tvServiceProviders' ? <TvServiceProviders setFormData={setFormData} setSelectedCard={setSelectedCard} /> :
-                selectedCard === 'electricMeterType' ? <ElectricMeterType setFormData={setFormData} formData={formData} setSelectedCard={setSelectedCard} setMeterType={setMeterType} /> :
-                renderPopup()
-              }
+          selectedCard === 'payElectricBilsModal' ?
+          <PayElectricBilsModal formData={formData} setformData={setFormData} setSelectedCard={setSelectedCard} /> :
+          selectedCard === 'payCableTv' ? 
+          <PayCableTv formData={formData} setformData={setFormData} setSelectedCard={setSelectedCard} /> :
+          <div className='fixed w-[100vw] h-[100vh] top-0 left-0 bg-black bg-opacity-80 z-50 overflow-x-hidden'>
+            <div className={`bg-main-bg w-full absolute flex flex-col bottom-0 left-0 ${selectedCard === 'electricMeterType' ? 'h-[50vh]' : 'h-[80vh] phone:h-[85vh] small-phone:h-[95vh]' } rounded-tl-[4rem] rounded-tr-[4rem] pl-6 pr-6 pt-4 pb-4`}>
+              <span onClick={closePopup} className='text-[40px] small-phone:text-[35px] font-extralight border-[3px] text-gray-600 cursor-pointer rounded-full border-gray-600 h-[40px] w-[40px] small-phone:h-[35px] small-phone:w-[35px] flex items-center justify-center ml-auto'>&times;</span>
+              <div className='h-full relative'>
+                {
+                  selectedCard === 'electricServiceProviders' ? <ElectricServiceProviders setFormData={setFormData} formData={formData} setSelectedCard={setSelectedCard} setProviderIcon={setProviderIcon} setProviderName={setProviderName} /> : 
+                  selectedCard === 'tvServiceProviders' ? <TvServiceProviders setFormData={setFormData} setSelectedCard={setSelectedCard} formData={formData} setCableTvName={setCableTvName} setCableTvIcon={setCableTvIcon} /> :
+                  selectedCard === 'electricMeterType' ? <ElectricMeterType setFormData={setFormData} formData={formData} setSelectedCard={setSelectedCard} setMeterType={setMeterType} /> :
+                  renderPopup()
+                }
+              </div>
             </div>
           </div>
-        </div>
         )
       }
         <Routes>
@@ -139,7 +148,7 @@ function App() {
             <Route path='/electricity' element={<Electricity formData={formData} setformData={setFormData} setSelectedCard={setSelectedCard} providerIcon={providerIcon} providerName={providerName} meterType={meterType} />} />
           </Route>
           <Route element={<AuthorizeUser />}>
-            <Route path='/tv' element={<Tv formData={formData} setformData={setFormData} setSelectedCard={setSelectedCard} />} />
+            <Route path='/tv' element={<Tv formData={formData} setformData={setFormData} setSelectedCard={setSelectedCard} cableTvName={cableTvName} cableTvIcon={cableTvIcon} />} />
           </Route>
           <Route element={<AuthorizeUser />}>
           <Route path='/refer-and-earn' element={<Rewards />} />
@@ -161,6 +170,9 @@ function App() {
           </Route>
           <Route element={<AuthorizeAdmin />}>
             <Route path='/data-plans' element={<DataPlans setSelectedCard={setSelectedCard} setformData={setFormData} formData={formData} />} />
+          </Route>
+          <Route element={<AuthorizeAdmin />}>
+            <Route path='/electricity-settings' element={<ElectricitySettings setSelectedCard={setSelectedCard} setformData={setFormData} formData={formData} />} />
           </Route>
 
 

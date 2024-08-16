@@ -101,3 +101,27 @@ export function useFetchReferres(query){
 
     return referresData
 }
+
+/**Get All Electricity service providers */
+export function useFetchElectricityServiceProviders(query){
+    const [ serviceProviders, setServiceProviders] = useState({ isFetchingElectricServices: true, electricServiceProviders: null, electricServiceProvidersStatus: null, electricServiceProvidersServerError: null, })
+    useEffect(() => {
+        const fetchElectricityProviders = async () => {
+            try {
+                const { data, status} = !query ? await axios.get(`/electricity/fetchElectricServiceProvider`, {withCredentials: true}) : await axios.get(`/electricity/fetchElectricServiceProvider/${query}`, {withCredentials: true})
+                //console.log('Data from Hooks>>>', data, 'STATUS', status)
+
+                if(status === 200){
+                    setServiceProviders({ isFetchingElectricServices: false, electricServiceProviders: data, electricServiceProvidersStatus: status, electricServiceProvidersServerError: null})
+                } else{
+                    setServiceProviders({ isFetchingElectricServices: false, electricServiceProviders: null, electricServiceProvidersStatus: status, electricServiceProvidersServerError: null})
+                }
+            } catch (error) {
+                setServiceProviders({ isFetchingElectricServices: false, electricServiceProviders: null, electricServiceProvidersStatus: null, electricServiceProvidersServerError: error})
+            }
+        }
+        fetchElectricityProviders()
+    }, [query])
+
+    return serviceProviders
+}

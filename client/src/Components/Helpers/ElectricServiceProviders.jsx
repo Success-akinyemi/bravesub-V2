@@ -1,14 +1,15 @@
 import { electricityProviders } from "../../data/electricity"
+import { useFetchElectricityServiceProviders } from "../../Helpers/fetch.hooks"
 
 function ElectricServiceProviders({setFormData, formData, setSelectedCard, setProviderName, setProviderIcon}) {
-    const isFetchingElectricServices = false
+    const { electricServiceProviders, isFetchingElectricServices } = useFetchElectricityServiceProviders()
     
     const electricityServices = electricityProviders
 
     const handleServices = (item) => {
         setProviderName(item?.name)
         setProviderIcon(item?.icon)
-        setFormData({ ...formData, providerName: item?.name, electricProviderCode: item?.code })
+        setFormData({ ...formData, providerName: item?.name, electricProviderCode: item?.code, meterSlug: item?.slug, _id: item?._id })
         setSelectedCard(null)
     }
     return (

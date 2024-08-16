@@ -6,6 +6,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 1,
+        slug: '02',
     },
     {
         _id: 2,
@@ -14,6 +15,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 2,
+        slug: '01',
     },
     {
         _id: 3,
@@ -22,6 +24,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 3,
+        slug: '03',
     },
     {
         _id: 4,
@@ -30,6 +33,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 4,
+        slug: '04',
     },
     {
         _id: 5,
@@ -38,6 +42,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 5,
+        slug: '09',
     },
     {
         _id: 6,
@@ -46,6 +51,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 6,
+        slug: '05',
     },
     {
         _id: 7,
@@ -54,6 +60,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 7,
+        slug: '07',
     },
     {
         _id: 8,
@@ -62,6 +69,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 8,
+        slug: '08',
     },
     {
         _id: 9,
@@ -70,6 +78,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 9,
+        slug: '06',
     },
     {
         _id: 11,
@@ -78,6 +87,7 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 11,
+        slug: '',
     },
     {
         _id: 13,
@@ -86,17 +96,20 @@ export const electricityProviders = [
         banner: '',
         bannerColor: '',
         code: 13,
+        slug: '10',
     },
 ]
 
 export const accountType = [
     {
         _id: 1,
-        type: 'Prepaid'
+        type: 'Prepaid',
+        code: '01'
     },
     {
         _id: 2,
-        type: 'Postpaid'
+        type: 'Postpaid',
+        code: '01'
     },
 ]
 

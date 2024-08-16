@@ -9,6 +9,9 @@ import airtimeRoute from './routes/web/airtime.routes.js'
 import dataRoute from './routes/web/data.routes.js'
 import userRoute from './routes/web/user.routes.js'
 import adminRoute from './routes/web/adminAuth.routes.js'
+import electricityRoute from './routes/web/electricity.routes.js'
+import cableTvRoute from './routes/web/cableTv.routes.js'
+
 import schedule from 'node-schedule'
 import axios from "axios";
 import UserModel from "./model/User.js";
@@ -70,7 +73,8 @@ app.use('/api/web/airtime', airtimeRoute)
 app.use('/api/web/data', dataRoute)
 app.use('/api/web/user', userRoute)
 app.use('/api/web/admin', adminRoute)
-
+app.use('/api/web/electricity', electricityRoute)
+app.use('/api/web/cableTv', cableTvRoute)
 
 
 

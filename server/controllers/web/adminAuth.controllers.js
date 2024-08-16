@@ -1,5 +1,6 @@
 import AdminUserModel from "../../model/AdminUser.js"
 import UserModel from "../../model/User.js"
+import { getAllUsers } from "./user.controllers.js"
 
 async function generateUniqueAdminUserCode(){
     let unique = false
@@ -73,6 +74,9 @@ export async function loginAdmin(req, res){
         }
 
         const getUser = await UserModel.findById({ _id: admin.userId})
+        if(!getUser){
+            return res.status(404).json({ success: false, data: 'Admin User does not exist in user database'})
+        }
         const { resetPasswordToken, resetPasswordExpire, password: hashedPassword, ...userData } = getUser._doc
 
         const token = admin.getSignedToken()
