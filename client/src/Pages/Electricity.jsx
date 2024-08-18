@@ -206,7 +206,7 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
       <div className="mt-[2rem] flex flex-col relative w-full overflow-x-hidden bg-white rounded-3xl p-3">
         <p>Payment Items</p>
         <div  onClick={handleMeterType} className={`flex items-center justify-between p-2 border-b-[1px] ${meterTypeError ? 'border-b-[2px] border-b-red-600' : 'border-b-gray-400'}`}>
-            <p className="text-[24px] font-semibold">{meterType}</p>
+            <p className="text-[24px] font-semibold phone:text-[21px] small-phone:text-[18px]">{meterType}</p>
             <div>
               <IoIosArrowDown />
             </div>
@@ -340,6 +340,8 @@ function Electricity({formData, setformData, setSelectedCard, providerIcon, prov
               </div>
           </div>
       </div>
+
+      <div className='mt-[2rem] mb-[5rem]'></div>
 
     </div>
   );

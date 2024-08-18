@@ -102,7 +102,6 @@ export async function register(req, res) {
                 
         }
          
-
         try {
             await registerMail({
                 username: `${user.firstName} ${user.lastName}`,

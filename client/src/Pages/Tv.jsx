@@ -121,7 +121,7 @@ function Tv({formData, setformData, setSelectedCard, cableTvName, cableTvIcon}) 
         <div className={`flex items-center justify-between cursor-pointer p-2 border-b-[1px] ${cableTvError ? 'border-b-[2px] border-b-red-600' : 'border-b-gray-400'} `} onClick={handleCableTvs}>
             <div className="flex items-center gap-[4px]">
                 <img src={cableTvIcon} alt='' className="w-[15px]" />
-                <h2 className="font-semibold">{cableTvName}</h2>
+                <h2 className="font-semibold phone:text-[15px] small-phone:text-[14px]">{cableTvName}</h2>
             </div>
             
             <div>
@@ -221,6 +221,8 @@ function Tv({formData, setformData, setSelectedCard, cableTvName, cableTvIcon}) 
             <button onClick={handleProceedToPay}>Pay</button>
         </div>
       </div>
+
+      <div className='mt-[2rem] mb-[5rem]'></div>
 
     </div>
   )
