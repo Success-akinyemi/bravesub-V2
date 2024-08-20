@@ -1,0 +1,25 @@
+//CORN KEEP ALIVE
+/**
+ * 
+app.get('/keep-alive', async (req, res) => {
+    const user = await UserModel.find()
+  
+    console.log('Total number of bookings.', user.length);
+    res.status(201).json(`Keep alive Request fun: ${user.length}`)
+  })
+
+const sendMessage = async () => {
+  try{
+    const res = await axios.get(`${process.env.NEBOUR_URL}/keep-alive`)
+  } catch {
+    console.log('UNABLE TO MEET NEBOUR URL') 
+  }
+
+    console.log('ALIVE RESPONSE', res.data)
+
+}
+
+const job = schedule.scheduleJob('*/3 * * * *', () => {
+    sendMessage();
+});
+ */
