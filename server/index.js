@@ -86,7 +86,8 @@ import './routes/whatsapp/whatsapp.js'
 
 
 //CORN KEEP ALIVE
-
+/**
+ * 
 app.get('/keep-alive', async (req, res) => {
     const user = await UserModel.find()
   
@@ -95,7 +96,11 @@ app.get('/keep-alive', async (req, res) => {
   })
 
 const sendMessage = async () => {
+  try{
     const res = await axios.get(`${process.env.NEBOUR_URL}/keep-alive`)
+  } catch {
+    console.log('UNABLE TO MEET NEBOUR URL') 
+  }
 
     console.log('ALIVE RESPONSE', res.data)
 
@@ -103,6 +108,7 @@ const sendMessage = async () => {
 const job = schedule.scheduleJob('*/3 * * * *', () => {
     sendMessage();
 });
+ */
 
 
 app.listen(PORT, () => {
