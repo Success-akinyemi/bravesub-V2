@@ -93,15 +93,14 @@ app.get('/keep-alive', async (req, res) => {
 })
 
 const sendMessage = async () => {
-try{
-  //const res = await axios.get(`${process.env.NEBOUR_URL}/keep-alive`)
-  const res = await axios.get(`https://bravesub-v2-b4fk.vercel.app/`)
-} catch {
-  console.log('UNABLE TO MEET NEBOUR URL') 
-}
-
-  console.log('ALIVE RESPONSE', res.data)
-
+  try{
+    //const res = await axios.get(`${process.env.NEBOUR_URL}/keep-alive`)
+    const req = await axios.get(`https://bravesub-v2-b4fk.vercel.app/`)
+    
+    console.log('ALIVE RESPONSE', req.data)
+  } catch {
+    console.log('UNABLE TO MEET NEBOUR URL') 
+  }
 }
 
 const job = schedule.scheduleJob('*/6 * * * *', () => {
