@@ -86,26 +86,17 @@ import './routes/whatsapp/whatsapp.js'
 //INSTAGRAM
 
 //CORN JOB
+import './corn.js'
+// Express route to keep the server alive
 app.get('/keep-alive', async (req, res) => {
-  const user = await UserModel.find()
-
-  console.log('Total number of bookings.', user.length);
-  res.status(201).json(`Keep alive Request fun: ${user.length}`)
-})
-
-const sendMessage = async () => {
-  try{
-    //const res = await axios.get(`${process.env.NEBOUR_URL}/keep-alive`)
-    const req = await axios.get(`https://bravesub-v2-b4fk.vercel.app/`)
-    
-    console.log('ALIVE RESPONSE', req.data)
-  } catch {
-    console.log('UNABLE TO MEET NEBOUR URL') 
+  try {
+    const bookings = await UserModel.find();
+    console.log('Total number of bookings:', bookings.length);
+    res.status(201).json(`Keep alive Request fun: ${bookings.length}`);
+  } catch (error) {
+    console.error('Error getting all bookings:', error);
+    res.status(500).json('Error');
   }
-}
-
-const job = schedule.scheduleJob('*/6 * * * *', () => {
-  sendMessage();
 });
 
 
