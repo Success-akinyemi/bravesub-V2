@@ -81,6 +81,7 @@ app.use('/api/web/cableTv', cableTvRoute)
 //WHATSAPP
 //import whatsappp
 import './routes/whatsapp/whatsapp.js'
+//import './routes/whatsapp/textSample.js'
 
 //INSTAGRAM
 

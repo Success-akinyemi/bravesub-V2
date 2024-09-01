@@ -7,6 +7,7 @@ import WhatsappChatModel from '../../model/WhatsappUserMsg.js';
 import DataPlansModel from '../../model/DataPlans.js';
 import * as controllers from '../../controllers/whatsapp/whatsapp.controllers.js'
 import schedule from 'node-schedule'
+import qrcode from 'qrcode-terminal'
 
 const braveLiteAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 //const braveLite = braveLiteAI.getGenerativeModel({ model: 'gemini-pro' });
@@ -55,7 +56,7 @@ async function connectionLogic() {
         const { connection, lastDisconnect, qr } = update || {};
 
         if (qr) {
-            console.log(qr);
+            console.log('QR CODE DATA',qr);
         }
 
         if (connection === 'close') {
