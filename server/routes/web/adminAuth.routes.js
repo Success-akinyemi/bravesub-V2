@@ -5,7 +5,7 @@ import { AdminProtect } from '../../middleware/auth.js'
 const router = express.Router()
 
 router.post('/MakeAdmin', AdminProtect, controllers.MakeAdmin)
-router.post('/loginAdmin', AdminProtect, controllers.loginAdmin)
+router.post('/loginAdmin', controllers.loginAdmin)
 router.post('/deleteAdmin', AdminProtect, controllers.deleteAdmin)
 
 
